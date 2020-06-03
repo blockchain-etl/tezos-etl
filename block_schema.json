@@ -1,0 +1,2606 @@
+{
+    "output": {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+            "protocol": {
+                "type": "string",
+                "enum": [
+                    "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY"
+                ]
+            },
+            "chain_id": {
+                "$ref": "#/definitions/Chain_id"
+            },
+            "hash": {
+                "$ref": "#/definitions/block_hash"
+            },
+            "header": {
+                "$ref": "#/definitions/raw_block_header"
+            },
+            "metadata": {
+                "$ref": "#/definitions/block_header_metadata"
+            },
+            "operations": {
+                "type": "array",
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/operation"
+                    }
+                }
+            }
+        },
+        "required": [
+            "operations",
+            "metadata",
+            "header",
+            "hash",
+            "chain_id",
+            "protocol"
+        ],
+        "additionalProperties": false,
+        "definitions": {
+            "Chain_id": {
+                "title": "Network identifier (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "unistring": {
+                "title": "Universal string representation",
+                "description": "Either a plain UTF8 string, or a sequence of bytes for strings that contain invalid byte sequences.",
+                "oneOf": [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "invalid_utf8_string": {
+                                "type": "array",
+                                "items": {
+                                    "type": "integer",
+                                    "minimum": 0,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 255,
+                                    "exclusiveMaximum": true
+                                }
+                            }
+                        },
+                        "required": [
+                            "invalid_utf8_string"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "block_hash": {
+                "title": "A block identifier (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "raw_block_header": {
+                "type": "object",
+                "properties": {
+                    "level": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "exclusiveMinimum": true,
+                        "maximum": 2147483647,
+                        "exclusiveMaximum": true
+                    },
+                    "proto": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 255,
+                        "exclusiveMaximum": true
+                    },
+                    "predecessor": {
+                        "$ref": "#/definitions/block_hash"
+                    },
+                    "timestamp": {
+                        "$ref": "#/definitions/timestamp.protocol"
+                    },
+                    "validation_pass": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 255,
+                        "exclusiveMaximum": true
+                    },
+                    "operations_hash": {
+                        "$ref": "#/definitions/Operation_list_list_hash"
+                    },
+                    "fitness": {
+                        "$ref": "#/definitions/fitness"
+                    },
+                    "context": {
+                        "$ref": "#/definitions/Context_hash"
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 65535,
+                        "exclusiveMaximum": true
+                    },
+                    "proof_of_work_nonce": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9]+$"
+                    },
+                    "seed_nonce_hash": {
+                        "$ref": "#/definitions/cycle_nonce"
+                    },
+                    "signature": {
+                        "$ref": "#/definitions/Signature"
+                    }
+                },
+                "required": [
+                    "signature",
+                    "proof_of_work_nonce",
+                    "priority",
+                    "context",
+                    "fitness",
+                    "operations_hash",
+                    "validation_pass",
+                    "timestamp",
+                    "predecessor",
+                    "proto",
+                    "level"
+                ],
+                "additionalProperties": false
+            },
+            "timestamp.protocol": {
+                "description": "A timestamp as seen by the protocol: second-level precision, epoch based.",
+                "oneOf": [
+                    {
+                        "title": "RFC encoding",
+                        "$ref": "#/definitions/timestamp.rfc"
+                    },
+                    {
+                        "title": "Second since epoch",
+                        "$ref": "#/definitions/int64"
+                    }
+                ]
+            },
+            "timestamp.rfc": {
+                "title": "RFC 3339 formatted timestamp",
+                "description": "A date in RFC 3339 notation.",
+                "$ref": "#/definitions/unistring"
+            },
+            "int64": {
+                "title": "64 bit integers",
+                "description": "Decimal representation of 64 bit integers",
+                "type": "string"
+            },
+            "Operation_list_list_hash": {
+                "title": "A list of list of operations (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "fitness": {
+                "title": "Block fitness",
+                "description": "The fitness, or score, of a block, that allow the Tezos to decide which chain is the best. A fitness value is a list of byte sequences. They are compared as follows: shortest lists are smaller; lists of the same length are compared according to the lexicographical order.",
+                "type": "array",
+                "items": {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z0-9]+$"
+                }
+            },
+            "Context_hash": {
+                "title": "A hash of context (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "cycle_nonce": {
+                "title": "A nonce hash (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "Signature": {
+                "title": "A Ed25519, Secp256k1 or P256 signature (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "block_header_metadata": {
+                "type": "object",
+                "properties": {
+                    "protocol": {
+                        "type": "string",
+                        "enum": [
+                            "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY"
+                        ]
+                    },
+                    "next_protocol": {
+                        "type": "string",
+                        "enum": [
+                            "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY"
+                        ]
+                    },
+                    "test_chain_status": {
+                        "$ref": "#/definitions/test_chain_status"
+                    },
+                    "max_operations_ttl": {
+                        "type": "integer",
+                        "minimum": -1073741824,
+                        "exclusiveMinimum": true,
+                        "maximum": 1073741823,
+                        "exclusiveMaximum": true
+                    },
+                    "max_operation_data_length": {
+                        "type": "integer",
+                        "minimum": -1073741824,
+                        "exclusiveMinimum": true,
+                        "maximum": 1073741823,
+                        "exclusiveMaximum": true
+                    },
+                    "max_block_header_length": {
+                        "type": "integer",
+                        "minimum": -1073741824,
+                        "exclusiveMinimum": true,
+                        "maximum": 1073741823,
+                        "exclusiveMaximum": true
+                    },
+                    "max_operation_list_length": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "max_size": {
+                                    "type": "integer",
+                                    "minimum": -1073741824,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 1073741823,
+                                    "exclusiveMaximum": true
+                                },
+                                "max_op": {
+                                    "type": "integer",
+                                    "minimum": -1073741824,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 1073741823,
+                                    "exclusiveMaximum": true
+                                }
+                            },
+                            "required": [
+                                "max_size"
+                            ],
+                            "additionalProperties": false
+                        }
+                    },
+                    "baker": {
+                        "$ref": "#/definitions/Signature.Public_key_hash"
+                    },
+                    "level": {
+                        "type": "object",
+                        "properties": {
+                            "level": {
+                                "description": "The level of the block relative to genesis. This is also the Shell's notion of level",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "level_position": {
+                                "description": "The level of the block relative to the block that starts protocol alpha. This is specific to the protocol alpha. Other protocols might or might not include a similar notion.",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "cycle": {
+                                "description": "The current cycle's number. Note that cycles are a protocol-specific notion. As a result, the cycle number starts at 0 with the first block of protocol alpha.",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "cycle_position": {
+                                "description": "The current level of the block relative to the first block of the current cycle.",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "voting_period": {
+                                "description": "The current voting period's index. Note that cycles are a protocol-specific notion. As a result, the voting period index starts at 0 with the first block of protocol alpha.",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "voting_period_position": {
+                                "description": "The current level of the block relative to the first block of the current voting period.",
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "expected_commitment": {
+                                "description": "Tells wether the baker of this block has to commit a seed nonce hash.",
+                                "type": "boolean"
+                            }
+                        },
+                        "required": [
+                            "expected_commitment",
+                            "voting_period_position",
+                            "voting_period",
+                            "cycle_position",
+                            "cycle",
+                            "level_position",
+                            "level"
+                        ],
+                        "additionalProperties": false
+                    },
+                    "voting_period_kind": {
+                        "oneOf": [
+                            {
+                                "title": "Proposal",
+                                "type": "string",
+                                "enum": [
+                                    "proposal"
+                                ]
+                            },
+                            {
+                                "title": "Testing_vote",
+                                "type": "string",
+                                "enum": [
+                                    "testing_vote"
+                                ]
+                            },
+                            {
+                                "title": "Testing",
+                                "type": "string",
+                                "enum": [
+                                    "testing"
+                                ]
+                            },
+                            {
+                                "title": "Promotion_vote",
+                                "type": "string",
+                                "enum": [
+                                    "promotion_vote"
+                                ]
+                            }
+                        ]
+                    },
+                    "nonce_hash": {
+                        "oneOf": [
+                            {
+                                "title": "Some",
+                                "$ref": "#/definitions/cycle_nonce"
+                            },
+                            {
+                                "title": "None",
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "consumed_gas": {
+                        "$ref": "#/definitions/positive_bignum"
+                    },
+                    "deactivated": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/Signature.Public_key_hash"
+                        }
+                    },
+                    "balance_updates": {
+                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                    }
+                },
+                "required": [
+                    "balance_updates",
+                    "deactivated",
+                    "consumed_gas",
+                    "nonce_hash",
+                    "voting_period_kind",
+                    "level",
+                    "baker",
+                    "max_operation_list_length",
+                    "max_block_header_length",
+                    "max_operation_data_length",
+                    "max_operations_ttl",
+                    "test_chain_status",
+                    "next_protocol",
+                    "protocol"
+                ],
+                "additionalProperties": false
+            },
+            "test_chain_status": {
+                "description": "The status of the test chain: not_running (there is no test chain at the moment), forking (the test chain is being setup), running (the test chain is running).",
+                "oneOf": [
+                    {
+                        "title": "Not_running",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "not_running"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Forking",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "forking"
+                                ]
+                            },
+                            "protocol": {
+                                "$ref": "#/definitions/Protocol_hash"
+                            },
+                            "expiration": {
+                                "$ref": "#/definitions/timestamp.protocol"
+                            }
+                        },
+                        "required": [
+                            "expiration",
+                            "protocol",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Running",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "running"
+                                ]
+                            },
+                            "chain_id": {
+                                "$ref": "#/definitions/Chain_id"
+                            },
+                            "genesis": {
+                                "$ref": "#/definitions/block_hash"
+                            },
+                            "protocol": {
+                                "$ref": "#/definitions/Protocol_hash"
+                            },
+                            "expiration": {
+                                "$ref": "#/definitions/timestamp.protocol"
+                            }
+                        },
+                        "required": [
+                            "expiration",
+                            "protocol",
+                            "genesis",
+                            "chain_id",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "Protocol_hash": {
+                "title": "A Tezos protocol ID (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "Signature.Public_key_hash": {
+                "title": "A Ed25519, Secp256k1, or P256 public key hash (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "positive_bignum": {
+                "title": "Positive big number",
+                "description": "Decimal representation of a positive big number",
+                "type": "string"
+            },
+            "operation_metadata.alpha.balance_updates": {
+                "type": "array",
+                "items": {
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "properties": {
+                                "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                        "contract"
+                                    ]
+                                },
+                                "contract": {
+                                    "$ref": "#/definitions/contract_id"
+                                },
+                                "change": {
+                                    "$ref": "#/definitions/int64"
+                                }
+                            },
+                            "required": [
+                                "change",
+                                "contract",
+                                "kind"
+                            ],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                        "freezer"
+                                    ]
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "enum": [
+                                        "rewards"
+                                    ]
+                                },
+                                "delegate": {
+                                    "$ref": "#/definitions/Signature.Public_key_hash"
+                                },
+                                "level": {
+                                    "type": "integer",
+                                    "minimum": -2147483648,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 2147483647,
+                                    "exclusiveMaximum": true
+                                },
+                                "change": {
+                                    "$ref": "#/definitions/int64"
+                                }
+                            },
+                            "required": [
+                                "change",
+                                "level",
+                                "delegate",
+                                "category",
+                                "kind"
+                            ],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                        "freezer"
+                                    ]
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "enum": [
+                                        "fees"
+                                    ]
+                                },
+                                "delegate": {
+                                    "$ref": "#/definitions/Signature.Public_key_hash"
+                                },
+                                "level": {
+                                    "type": "integer",
+                                    "minimum": -2147483648,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 2147483647,
+                                    "exclusiveMaximum": true
+                                },
+                                "change": {
+                                    "$ref": "#/definitions/int64"
+                                }
+                            },
+                            "required": [
+                                "change",
+                                "level",
+                                "delegate",
+                                "category",
+                                "kind"
+                            ],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "properties": {
+                                "kind": {
+                                    "type": "string",
+                                    "enum": [
+                                        "freezer"
+                                    ]
+                                },
+                                "category": {
+                                    "type": "string",
+                                    "enum": [
+                                        "deposits"
+                                    ]
+                                },
+                                "delegate": {
+                                    "$ref": "#/definitions/Signature.Public_key_hash"
+                                },
+                                "level": {
+                                    "type": "integer",
+                                    "minimum": -2147483648,
+                                    "exclusiveMinimum": true,
+                                    "maximum": 2147483647,
+                                    "exclusiveMaximum": true
+                                },
+                                "change": {
+                                    "$ref": "#/definitions/int64"
+                                }
+                            },
+                            "required": [
+                                "change",
+                                "level",
+                                "delegate",
+                                "category",
+                                "kind"
+                            ],
+                            "additionalProperties": false
+                        }
+                    ]
+                }
+            },
+            "contract_id": {
+                "title": "A contract handle",
+                "description": "A contract notation as given to an RPC or inside scripts. Can be a base58 implicit contract hash or a base58 originated contract hash.",
+                "$ref": "#/definitions/unistring"
+            },
+            "operation": {
+                "oneOf": [
+                    {
+                        "type": "object",
+                        "properties": {
+                            "protocol": {
+                                "type": "string",
+                                "enum": [
+                                    "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY"
+                                ]
+                            },
+                            "chain_id": {
+                                "$ref": "#/definitions/Chain_id"
+                            },
+                            "hash": {
+                                "$ref": "#/definitions/Operation_hash"
+                            },
+                            "branch": {
+                                "$ref": "#/definitions/block_hash"
+                            },
+                            "contents": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/operation.alpha.operation_contents_and_result"
+                                }
+                            },
+                            "signature": {
+                                "$ref": "#/definitions/Signature"
+                            }
+                        },
+                        "required": [
+                            "contents",
+                            "branch",
+                            "hash",
+                            "chain_id",
+                            "protocol"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "protocol": {
+                                "type": "string",
+                                "enum": [
+                                    "PtCJ7pwoxe8JasnHY8YonnLYjcVHmhiARPJvqcC6VfHT5s8k8sY"
+                                ]
+                            },
+                            "chain_id": {
+                                "$ref": "#/definitions/Chain_id"
+                            },
+                            "hash": {
+                                "$ref": "#/definitions/Operation_hash"
+                            },
+                            "branch": {
+                                "$ref": "#/definitions/block_hash"
+                            },
+                            "contents": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/operation.alpha.contents"
+                                }
+                            },
+                            "signature": {
+                                "$ref": "#/definitions/Signature"
+                            }
+                        },
+                        "required": [
+                            "contents",
+                            "branch",
+                            "hash",
+                            "chain_id",
+                            "protocol"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "Operation_hash": {
+                "title": "A Tezos operation ID (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "operation.alpha.operation_contents_and_result": {
+                "oneOf": [
+                    {
+                        "title": "Endorsement",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "endorsement"
+                                ]
+                            },
+                            "level": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    },
+                                    "delegate": {
+                                        "$ref": "#/definitions/Signature.Public_key_hash"
+                                    },
+                                    "slots": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer",
+                                            "minimum": 0,
+                                            "exclusiveMinimum": true,
+                                            "maximum": 255,
+                                            "exclusiveMaximum": true
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "slots",
+                                    "delegate",
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "level",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Seed_nonce_revelation",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "seed_nonce_revelation"
+                                ]
+                            },
+                            "level": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "nonce": {
+                                "type": "string",
+                                "pattern": "^[a-zA-Z0-9]+$"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    }
+                                },
+                                "required": [
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "nonce",
+                            "level",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Double_endorsement_evidence",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "double_endorsement_evidence"
+                                ]
+                            },
+                            "op1": {
+                                "$ref": "#/definitions/inlined.endorsement"
+                            },
+                            "op2": {
+                                "$ref": "#/definitions/inlined.endorsement"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    }
+                                },
+                                "required": [
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "op2",
+                            "op1",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Double_baking_evidence",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "double_baking_evidence"
+                                ]
+                            },
+                            "bh1": {
+                                "$ref": "#/definitions/block_header.alpha.full_header"
+                            },
+                            "bh2": {
+                                "$ref": "#/definitions/block_header.alpha.full_header"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    }
+                                },
+                                "required": [
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "bh2",
+                            "bh1",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Activate_account",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "activate_account"
+                                ]
+                            },
+                            "pkh": {
+                                "$ref": "#/definitions/Ed25519.Public_key_hash"
+                            },
+                            "secret": {
+                                "type": "string",
+                                "pattern": "^[a-zA-Z0-9]+$"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    }
+                                },
+                                "required": [
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "secret",
+                            "pkh",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Proposals",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "proposals"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "period": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "proposals": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Protocol_hash"
+                                }
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {},
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "proposals",
+                            "period",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Ballot",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "ballot"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "period": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "proposal": {
+                                "$ref": "#/definitions/Protocol_hash"
+                            },
+                            "ballot": {
+                                "type": "string",
+                                "enum": [
+                                    "nay",
+                                    "yay",
+                                    "pass"
+                                ]
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {},
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "ballot",
+                            "proposal",
+                            "period",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Reveal",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "reveal"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "public_key": {
+                                "$ref": "#/definitions/Signature.Public_key"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    },
+                                    "operation_result": {
+                                        "$ref": "#/definitions/operation.alpha.operation_result.reveal"
+                                    },
+                                    "internal_operation_results": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/definitions/operation.alpha.internal_operation_result"
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "operation_result",
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "public_key",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Transaction",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "transaction"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "amount": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "destination": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "parameters": {
+                                "$ref": "#/definitions/micheline.michelson_v1.expression"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    },
+                                    "operation_result": {
+                                        "$ref": "#/definitions/operation.alpha.operation_result.transaction"
+                                    },
+                                    "internal_operation_results": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/definitions/operation.alpha.internal_operation_result"
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "operation_result",
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "destination",
+                            "amount",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Origination",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "origination"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "managerPubkey": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "balance": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "spendable": {
+                                "type": "boolean"
+                            },
+                            "delegatable": {
+                                "type": "boolean"
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "script": {
+                                "$ref": "#/definitions/scripted.contracts"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    },
+                                    "operation_result": {
+                                        "$ref": "#/definitions/operation.alpha.operation_result.origination"
+                                    },
+                                    "internal_operation_results": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/definitions/operation.alpha.internal_operation_result"
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "operation_result",
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "balance",
+                            "managerPubkey",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Delegation",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "delegation"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "metadata": {
+                                "type": "object",
+                                "properties": {
+                                    "balance_updates": {
+                                        "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                                    },
+                                    "operation_result": {
+                                        "$ref": "#/definitions/operation.alpha.operation_result.delegation"
+                                    },
+                                    "internal_operation_results": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/definitions/operation.alpha.internal_operation_result"
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "operation_result",
+                                    "balance_updates"
+                                ],
+                                "additionalProperties": false
+                            }
+                        },
+                        "required": [
+                            "metadata",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "inlined.endorsement": {
+                "type": "object",
+                "properties": {
+                    "branch": {
+                        "$ref": "#/definitions/block_hash"
+                    },
+                    "operations": {
+                        "$ref": "#/definitions/inlined.endorsement.contents"
+                    },
+                    "signature": {
+                        "$ref": "#/definitions/Signature"
+                    }
+                },
+                "required": [
+                    "operations",
+                    "branch"
+                ],
+                "additionalProperties": false
+            },
+            "inlined.endorsement.contents": {
+                "type": "object",
+                "properties": {
+                    "kind": {
+                        "type": "string",
+                        "enum": [
+                            "endorsement"
+                        ]
+                    },
+                    "level": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "exclusiveMinimum": true,
+                        "maximum": 2147483647,
+                        "exclusiveMaximum": true
+                    }
+                },
+                "required": [
+                    "level",
+                    "kind"
+                ],
+                "additionalProperties": false
+            },
+            "block_header.alpha.full_header": {
+                "type": "object",
+                "properties": {
+                    "level": {
+                        "type": "integer",
+                        "minimum": -2147483648,
+                        "exclusiveMinimum": true,
+                        "maximum": 2147483647,
+                        "exclusiveMaximum": true
+                    },
+                    "proto": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 255,
+                        "exclusiveMaximum": true
+                    },
+                    "predecessor": {
+                        "$ref": "#/definitions/block_hash"
+                    },
+                    "timestamp": {
+                        "$ref": "#/definitions/timestamp.protocol"
+                    },
+                    "validation_pass": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 255,
+                        "exclusiveMaximum": true
+                    },
+                    "operations_hash": {
+                        "$ref": "#/definitions/Operation_list_list_hash"
+                    },
+                    "fitness": {
+                        "$ref": "#/definitions/fitness"
+                    },
+                    "context": {
+                        "$ref": "#/definitions/Context_hash"
+                    },
+                    "priority": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "exclusiveMinimum": true,
+                        "maximum": 65535,
+                        "exclusiveMaximum": true
+                    },
+                    "proof_of_work_nonce": {
+                        "type": "string",
+                        "pattern": "^[a-zA-Z0-9]+$"
+                    },
+                    "seed_nonce_hash": {
+                        "$ref": "#/definitions/cycle_nonce"
+                    },
+                    "signature": {
+                        "$ref": "#/definitions/Signature"
+                    }
+                },
+                "required": [
+                    "signature",
+                    "proof_of_work_nonce",
+                    "priority",
+                    "context",
+                    "fitness",
+                    "operations_hash",
+                    "validation_pass",
+                    "timestamp",
+                    "predecessor",
+                    "proto",
+                    "level"
+                ],
+                "additionalProperties": false
+            },
+            "Ed25519.Public_key_hash": {
+                "title": "An Ed25519 public key hash (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "mutez": {
+                "$ref": "#/definitions/positive_bignum"
+            },
+            "Signature.Public_key": {
+                "title": "A Ed25519, Secp256k1, or P256 public key (Base58Check-encoded)",
+                "$ref": "#/definitions/unistring"
+            },
+            "operation.alpha.operation_result.reveal": {
+                "oneOf": [
+                    {
+                        "title": "Applied",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "applied"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Failed",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "failed"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "errors",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Skipped",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "skipped"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Backtracked",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "backtracked"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "error": {
+                "description": "The full list of RPC errors would be too long to include.\nIt is available at RPC `/errors` (GET).\nErrors specific to protocol Alpha have an id that starts with `proto.alpha`."
+            },
+            "operation.alpha.internal_operation_result": {
+                "oneOf": [
+                    {
+                        "title": "reveal",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "reveal"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "nonce": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true,
+                                "maximum": 65535,
+                                "exclusiveMaximum": true
+                            },
+                            "public_key": {
+                                "$ref": "#/definitions/Signature.Public_key"
+                            },
+                            "result": {
+                                "$ref": "#/definitions/operation.alpha.operation_result.reveal"
+                            }
+                        },
+                        "required": [
+                            "result",
+                            "public_key",
+                            "nonce",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "transaction",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "transaction"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "nonce": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true,
+                                "maximum": 65535,
+                                "exclusiveMaximum": true
+                            },
+                            "amount": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "destination": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "parameters": {
+                                "$ref": "#/definitions/micheline.michelson_v1.expression"
+                            },
+                            "result": {
+                                "$ref": "#/definitions/operation.alpha.operation_result.transaction"
+                            }
+                        },
+                        "required": [
+                            "result",
+                            "destination",
+                            "amount",
+                            "nonce",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "origination",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "origination"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "nonce": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true,
+                                "maximum": 65535,
+                                "exclusiveMaximum": true
+                            },
+                            "managerPubkey": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "balance": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "spendable": {
+                                "type": "boolean"
+                            },
+                            "delegatable": {
+                                "type": "boolean"
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "script": {
+                                "$ref": "#/definitions/scripted.contracts"
+                            },
+                            "result": {
+                                "$ref": "#/definitions/operation.alpha.operation_result.origination"
+                            }
+                        },
+                        "required": [
+                            "result",
+                            "balance",
+                            "managerPubkey",
+                            "nonce",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "delegation",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "delegation"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "nonce": {
+                                "type": "integer",
+                                "minimum": 0,
+                                "exclusiveMinimum": true,
+                                "maximum": 65535,
+                                "exclusiveMaximum": true
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "result": {
+                                "$ref": "#/definitions/operation.alpha.operation_result.delegation"
+                            }
+                        },
+                        "required": [
+                            "result",
+                            "nonce",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "micheline.michelson_v1.expression": {
+                "oneOf": [
+                    {
+                        "title": "Int",
+                        "type": "object",
+                        "properties": {
+                            "int": {
+                                "$ref": "#/definitions/bignum"
+                            }
+                        },
+                        "required": [
+                            "int"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "String",
+                        "type": "object",
+                        "properties": {
+                            "string": {
+                                "$ref": "#/definitions/unistring"
+                            }
+                        },
+                        "required": [
+                            "string"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Bytes",
+                        "type": "object",
+                        "properties": {
+                            "bytes": {
+                                "type": "string",
+                                "pattern": "^[a-zA-Z0-9]+$"
+                            }
+                        },
+                        "required": [
+                            "bytes"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Sequence",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/definitions/micheline.michelson_v1.expression"
+                        }
+                    },
+                    {
+                        "title": "Generic prim (any number of args with or without annot)",
+                        "type": "object",
+                        "properties": {
+                            "prim": {
+                                "$ref": "#/definitions/michelson.v1.primitives"
+                            },
+                            "args": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/micheline.michelson_v1.expression"
+                                }
+                            },
+                            "annots": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required": [
+                            "prim"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "bignum": {
+                "title": "Big number",
+                "description": "Decimal representation of a big number",
+                "type": "string"
+            },
+            "michelson.v1.primitives": {
+                "type": "string",
+                "enum": [
+                    "ADD",
+                    "LE",
+                    "UPDATE",
+                    "unit",
+                    "string",
+                    "COMPARE",
+                    "LAMBDA",
+                    "LOOP",
+                    "Elt",
+                    "IMPLICIT_ACCOUNT",
+                    "NONE",
+                    "signature",
+                    "set",
+                    "mutez",
+                    "BLAKE2B",
+                    "SHA256",
+                    "ITER",
+                    "bool",
+                    "MAP",
+                    "UNIT",
+                    "DIP",
+                    "PACK",
+                    "pair",
+                    "SIZE",
+                    "Right",
+                    "map",
+                    "IF_CONS",
+                    "LSR",
+                    "SET_DELEGATE",
+                    "storage",
+                    "XOR",
+                    "CDR",
+                    "TRANSFER_TOKENS",
+                    "SOME",
+                    "False",
+                    "SHA512",
+                    "CHECK_SIGNATURE",
+                    "BALANCE",
+                    "lambda",
+                    "operation",
+                    "EMPTY_SET",
+                    "SWAP",
+                    "MEM",
+                    "RIGHT",
+                    "CONTRACT",
+                    "or",
+                    "CONCAT",
+                    "nat",
+                    "bytes",
+                    "Unit",
+                    "Some",
+                    "UNPACK",
+                    "NOT",
+                    "LEFT",
+                    "timestamp",
+                    "AMOUNT",
+                    "DROP",
+                    "ABS",
+                    "contract",
+                    "GE",
+                    "PUSH",
+                    "LT",
+                    "address",
+                    "NEQ",
+                    "NEG",
+                    "None",
+                    "CONS",
+                    "EXEC",
+                    "NIL",
+                    "CAST",
+                    "MUL",
+                    "ADDRESS",
+                    "EDIV",
+                    "STEPS_TO_QUOTA",
+                    "SUB",
+                    "INT",
+                    "SOURCE",
+                    "CAR",
+                    "CREATE_ACCOUNT",
+                    "LSL",
+                    "OR",
+                    "IF_NONE",
+                    "SELF",
+                    "IF",
+                    "Left",
+                    "int",
+                    "big_map",
+                    "SENDER",
+                    "option",
+                    "DUP",
+                    "EQ",
+                    "NOW",
+                    "key_hash",
+                    "GET",
+                    "list",
+                    "key",
+                    "True",
+                    "GT",
+                    "parameter",
+                    "IF_LEFT",
+                    "FAILWITH",
+                    "PAIR",
+                    "LOOP_LEFT",
+                    "Pair",
+                    "RENAME",
+                    "EMPTY_MAP",
+                    "CREATE_CONTRACT",
+                    "HASH_KEY",
+                    "ISNAT",
+                    "code",
+                    "AND"
+                ]
+            },
+            "operation.alpha.operation_result.transaction": {
+                "oneOf": [
+                    {
+                        "title": "Applied",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "applied"
+                                ]
+                            },
+                            "storage": {
+                                "$ref": "#/definitions/micheline.michelson_v1.expression"
+                            },
+                            "balance_updates": {
+                                "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                            },
+                            "originated_contracts": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/contract_id"
+                                }
+                            },
+                            "consumed_gas": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "storage_size": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "paid_storage_size_diff": {
+                                "$ref": "#/definitions/bignum"
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Failed",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "failed"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "errors",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Skipped",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "skipped"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Backtracked",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "backtracked"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            },
+                            "storage": {
+                                "$ref": "#/definitions/micheline.michelson_v1.expression"
+                            },
+                            "balance_updates": {
+                                "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                            },
+                            "originated_contracts": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/contract_id"
+                                }
+                            },
+                            "consumed_gas": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "storage_size": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "paid_storage_size_diff": {
+                                "$ref": "#/definitions/bignum"
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "scripted.contracts": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "$ref": "#/definitions/micheline.michelson_v1.expression"
+                    },
+                    "storage": {
+                        "$ref": "#/definitions/micheline.michelson_v1.expression"
+                    }
+                },
+                "required": [
+                    "storage",
+                    "code"
+                ],
+                "additionalProperties": false
+            },
+            "operation.alpha.operation_result.origination": {
+                "oneOf": [
+                    {
+                        "title": "Applied",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "applied"
+                                ]
+                            },
+                            "balance_updates": {
+                                "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                            },
+                            "originated_contracts": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/contract_id"
+                                }
+                            },
+                            "consumed_gas": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "storage_size": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "paid_storage_size_diff": {
+                                "$ref": "#/definitions/bignum"
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Failed",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "failed"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "errors",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Skipped",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "skipped"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Backtracked",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "backtracked"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            },
+                            "balance_updates": {
+                                "$ref": "#/definitions/operation_metadata.alpha.balance_updates"
+                            },
+                            "originated_contracts": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/contract_id"
+                                }
+                            },
+                            "consumed_gas": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "storage_size": {
+                                "$ref": "#/definitions/bignum"
+                            },
+                            "paid_storage_size_diff": {
+                                "$ref": "#/definitions/bignum"
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "operation.alpha.operation_result.delegation": {
+                "oneOf": [
+                    {
+                        "title": "Applied",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "applied"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Failed",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "failed"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "errors",
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Skipped",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "skipped"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Backtracked",
+                        "type": "object",
+                        "properties": {
+                            "status": {
+                                "type": "string",
+                                "enum": [
+                                    "backtracked"
+                                ]
+                            },
+                            "errors": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/error"
+                                }
+                            }
+                        },
+                        "required": [
+                            "status"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            },
+            "operation.alpha.contents": {
+                "oneOf": [
+                    {
+                        "title": "Endorsement",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "endorsement"
+                                ]
+                            },
+                            "level": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            }
+                        },
+                        "required": [
+                            "level",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Seed_nonce_revelation",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "seed_nonce_revelation"
+                                ]
+                            },
+                            "level": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "nonce": {
+                                "type": "string",
+                                "pattern": "^[a-zA-Z0-9]+$"
+                            }
+                        },
+                        "required": [
+                            "nonce",
+                            "level",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Double_endorsement_evidence",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "double_endorsement_evidence"
+                                ]
+                            },
+                            "op1": {
+                                "$ref": "#/definitions/inlined.endorsement"
+                            },
+                            "op2": {
+                                "$ref": "#/definitions/inlined.endorsement"
+                            }
+                        },
+                        "required": [
+                            "op2",
+                            "op1",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Double_baking_evidence",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "double_baking_evidence"
+                                ]
+                            },
+                            "bh1": {
+                                "$ref": "#/definitions/block_header.alpha.full_header"
+                            },
+                            "bh2": {
+                                "$ref": "#/definitions/block_header.alpha.full_header"
+                            }
+                        },
+                        "required": [
+                            "bh2",
+                            "bh1",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Activate_account",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "activate_account"
+                                ]
+                            },
+                            "pkh": {
+                                "$ref": "#/definitions/Ed25519.Public_key_hash"
+                            },
+                            "secret": {
+                                "type": "string",
+                                "pattern": "^[a-zA-Z0-9]+$"
+                            }
+                        },
+                        "required": [
+                            "secret",
+                            "pkh",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Proposals",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "proposals"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "period": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "proposals": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Protocol_hash"
+                                }
+                            }
+                        },
+                        "required": [
+                            "proposals",
+                            "period",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Ballot",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "ballot"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "period": {
+                                "type": "integer",
+                                "minimum": -2147483648,
+                                "exclusiveMinimum": true,
+                                "maximum": 2147483647,
+                                "exclusiveMaximum": true
+                            },
+                            "proposal": {
+                                "$ref": "#/definitions/Protocol_hash"
+                            },
+                            "ballot": {
+                                "type": "string",
+                                "enum": [
+                                    "nay",
+                                    "yay",
+                                    "pass"
+                                ]
+                            }
+                        },
+                        "required": [
+                            "ballot",
+                            "proposal",
+                            "period",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Reveal",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "reveal"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "public_key": {
+                                "$ref": "#/definitions/Signature.Public_key"
+                            }
+                        },
+                        "required": [
+                            "public_key",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Transaction",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "transaction"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "amount": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "destination": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "parameters": {
+                                "$ref": "#/definitions/micheline.michelson_v1.expression"
+                            }
+                        },
+                        "required": [
+                            "destination",
+                            "amount",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Origination",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "origination"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "managerPubkey": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "balance": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "spendable": {
+                                "type": "boolean"
+                            },
+                            "delegatable": {
+                                "type": "boolean"
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            },
+                            "script": {
+                                "$ref": "#/definitions/scripted.contracts"
+                            }
+                        },
+                        "required": [
+                            "balance",
+                            "managerPubkey",
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    },
+                    {
+                        "title": "Delegation",
+                        "type": "object",
+                        "properties": {
+                            "kind": {
+                                "type": "string",
+                                "enum": [
+                                    "delegation"
+                                ]
+                            },
+                            "source": {
+                                "$ref": "#/definitions/contract_id"
+                            },
+                            "fee": {
+                                "$ref": "#/definitions/mutez"
+                            },
+                            "counter": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "gas_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "storage_limit": {
+                                "$ref": "#/definitions/positive_bignum"
+                            },
+                            "delegate": {
+                                "$ref": "#/definitions/Signature.Public_key_hash"
+                            }
+                        },
+                        "required": [
+                            "storage_limit",
+                            "gas_limit",
+                            "counter",
+                            "fee",
+                            "source",
+                            "kind"
+                        ],
+                        "additionalProperties": false
+                    }
+                ]
+            }
+        }
+    }
+}
