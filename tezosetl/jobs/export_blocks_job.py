@@ -19,10 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-
-from tezosetl.mappers.action_mapper import TezosActionMapper
-from tezosetl.mappers.block_mapper import TezosBlockMapper
-from tezosetl.mappers.transaction_mapper import TezosTransactionMapper
+from tezosetl.mappers.block_mapper import map_block
 from tezosetl.service.tezos_service import TezosService
 from blockchainetl_common.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl_common.jobs.base_job import BaseJob
@@ -38,10 +35,7 @@ class ExportBlocksJob(BaseJob):
             tezos_rpc,
             max_workers,
             item_exporter,
-            batch_size=1,
-            export_blocks=True,
-            export_transactions=True,
-            export_actions=True):
+            batch_size=1):
         validate_range(start_block, end_block)
         self.start_block = start_block
         self.end_block = end_block
@@ -49,16 +43,7 @@ class ExportBlocksJob(BaseJob):
         self.batch_work_executor = BatchWorkExecutor(batch_size, max_workers)
         self.item_exporter = item_exporter
 
-        self.export_blocks = export_blocks
-        self.export_transactions = export_transactions
-        self.export_actions = export_actions
-        if not self.export_blocks and not self.export_transactions and not self.export_actions:
-            raise ValueError('At least one of export_blocks or export_transactions or export_actions must be True')
-
         self.tezos_service = TezosService(tezos_rpc)
-        self.block_mapper = TezosBlockMapper()
-        self.transaction_mapper = TezosTransactionMapper()
-        self.action_mapper = TezosActionMapper()
 
     def _start(self):
         self.item_exporter.open()
@@ -74,24 +59,21 @@ class ExportBlocksJob(BaseJob):
         blocks = self.tezos_service.get_blocks(block_number_batch)
         for block in blocks:
             self._export_block(block)
-            self._export_transactions(block)
+            # self._export_transactions(block)
 
     def _export_block(self, block):
-        if self.export_blocks:
-            self.item_exporter.export_item(self.block_mapper.block_to_dict(block))
+        self.item_exporter.export_item(map_block(block))
 
     def _export_transactions(self, block):
-        if self.export_transactions:
-            for transaction in block['transactions']:
-                self._export_transaction(transaction, block)
+        for transaction in block['transactions']:
+            self._export_transaction(transaction, block)
 
     def _export_transaction(self, transaction, block):
         transaction_dict = self.transaction_mapper.transaction_to_dict(transaction, block)
 
         self.item_exporter.export_item(transaction_dict)
 
-        if self.export_actions \
-                and isinstance(transaction.get('trx'), dict) \
+        if isinstance(transaction.get('trx'), dict) \
                 and transaction.get('trx').get('transaction') is not None \
                 and transaction.get('trx').get('transaction').get('actions') is not None:
             for action in transaction.get('trx').get('transaction').get('actions'):

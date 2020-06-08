@@ -12,15 +12,9 @@ Usage: tezosetl export_blocks [OPTIONS]
 Options:
   -s, --start-block INTEGER   Start block
   -e, --end-block INTEGER     End block  [required]
-  -p, --provider-uri TEXT     The URI of the web3 provider e.g.
-                              file://$HOME/Library/Tezos/geth.ipc or
-                              https://mainnet.infura.io
+  -p, --provider-uri TEXT     The URI of the provider e.g. https://mainnet-tezos.giganode.io
   -w, --max-workers INTEGER   The maximum number of workers.
-  --blocks-output TEXT        The output file for blocks. If not provided
-                              blocks will not be exported. Use "-" for stdout
-  --transactions-output TEXT  The output file for transactions. If not
-                              provided transactions will not be exported. Use
-                              "-" for stdout
+  --output-dir TEXT        The output dir for block data.
   -h, --help                  Show this message and exit.
 ```
 
@@ -30,8 +24,7 @@ For the `--output` parameters the supported types are csv and json. The format t
 
 ```bash
 > tezosetl export_blocks --start-block 0 --end-block 500000 \
---provider-uri file://$HOME/Library/Tezos/geth.ipc \
---blocks-output blocks.csv --transactions-output transactions.csv
+--provider-uri https://mainnet-tezos.giganode.io --output-dir output 
 ```
 
 Omit `--blocks-output` or `--transactions-output` options if you want to export only transactions/blocks.

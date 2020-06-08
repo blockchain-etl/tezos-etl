@@ -20,16 +20,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-from tezosetl.mappers.action_mapper import TezosActionMapper
-from tezosetl.mappers.block_mapper import TezosBlockMapper
-from tezosetl.mappers.transaction_mapper import TezosTransactionMapper
-
 
 class TezosService(object):
     def __init__(self, tezos_rpc):
         self.tezos_rpc = tezos_rpc
-        self.transaction_mapper = TezosTransactionMapper()
-        self.action_mapper = TezosActionMapper()
 
     def get_block(self, block_id):
         return self.tezos_rpc.getblock(block_id)

@@ -27,7 +27,7 @@ from time import time
 from blockchainetl_common.logging_utils import logging_basic_config
 from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
 from tezosetl.jobs.export_blocks_job import ExportBlocksJob
-from tezosetl.jobs.exporters.blocks_item_exporter import blocks_item_exporter
+from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tezosetl.rpc.tezos_rpc import TezosRpc
 
 logging_basic_config()
@@ -102,9 +102,8 @@ def export_all(partitions, output_dir, provider_uri, max_workers, batch_size):
             batch_size=batch_size,
             tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),
             max_workers=max_workers,
-            item_exporter=blocks_item_exporter(blocks_file, transactions_file, actions_file),
-            export_blocks=blocks_file is not None,
-            export_transactions=transactions_file is not None)
+            item_exporter=TezosItemExporter(blocks_file),
+        )
         job.run()
 
         # # # finish # # #

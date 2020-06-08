@@ -20,27 +20,48 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+from tezosetl.utils.cast_utils import safe_int
+from tezosetl.utils.date_utils import convert_timestr_to_timestamp
 
-class TezosBlockMapper(object):
 
-    def block_to_dict(self, block):
-        if block.get('transactions') is not None:
-            transaction_count = len(block.get('transactions'))
-        else:
-            transaction_count = 0
+def map_block(response):
+    block = {}
+    block['type'] = 'block'
+    block['protocol'] = response.get('protocol')
+    block['chain_id'] = response.get('chain_id')
+    block['block_hash'] = response.get('hash')
 
-        return {
-            'type': 'block',
-            'hash': block.get('id'),
-            'number': block.get('block_num'),
-            'ref_block_prefix': block.get('ref_block_prefix'),
-            'previous': block.get('previous'),
-            'action_mroot': block.get('action_mroot'),
-            'transaction_mroot': block.get('transaction_mroot'),
-            'new_producers': block.get('new_producers'),
-            'header_extensions': block.get('header_extensions'),
-            'block_extensions': block.get('block_extensions'),
-            'timestamp': block.get('timestamp'),
-            'producer': block.get('producer'),
-            'transaction_count': transaction_count
-        }
+    number_of_operations = 0
+    for operation_group in response.get('operations', []):
+        number_of_operations += len(operation_group)
+    block['number_of_operation_groups'] = len(response.get('operations', []))
+    block['number_of_operations'] = number_of_operations
+
+    header = response.get('header')
+    if header is not None:
+        block['level'] = header.get('level')
+        block['proto'] = header.get('proto')
+        block['predecessor'] = header.get('predecessor')
+        block['timestamp'] = convert_timestr_to_timestamp(header.get('timestamp')) * 1000
+        block['validation_pass'] = header.get('validation_pass')
+        block['operations_hash'] = header.get('operations_hash')
+        block['fitness'] = header.get('fitness')
+        block['context'] = header.get('context')
+
+    metadata = response.get('metadata')
+    if metadata is not None:
+        block['nonce_hash'] = metadata.get('nonce_hash')
+        block['consumed_gas'] = safe_int(metadata.get('consumed_gas'))
+        block['baker'] = metadata.get('baker')
+        block['voting_period_kind'] = metadata.get('voting_period_kind')
+
+        level = metadata.get('level')
+
+        if level is not None:
+            block['cycle'] = level.get('cycle')
+            block['cycle_position'] = level.get('cycle_position')
+            block['voting_period'] = level.get('voting_period')
+            block['voting_period_position'] = level.get('voting_period_position')
+            block['expected_commitment'] = level.get('expected_commitment')
+
+    return block

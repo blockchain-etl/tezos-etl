@@ -24,7 +24,8 @@
 import click
 
 from tezosetl.jobs.export_blocks_job import ExportBlocksJob
-from tezosetl.jobs.exporters.blocks_item_exporter import blocks_item_exporter
+
+from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tezosetl.rpc.tezos_rpc import TezosRpc
 from blockchainetl_common.logging_utils import logging_basic_config
 from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
@@ -35,32 +36,19 @@ logging_basic_config()
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('-s', '--start-block', default=0, type=int, help='Start block')
 @click.option('-e', '--end-block', required=True, type=int, help='End block')
-@click.option('-p', '--provider-uri', default='http://api.main.alohatezos.com', type=str,
+@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', type=str,
               help='The URI of the remote Tezos node')
 @click.option('-w', '--max-workers', default=5, type=int, help='The maximum number of workers.')
-@click.option('--blocks-output', default=None, type=str,
-              help='The output file for blocks. '
-                   'If not provided blocks will not be exported. Use "-" for stdout')
-@click.option('--transactions-output', default=None, type=str,
-              help='The output file for transactions. '
-                   'If not provided transactions will not be exported. Use "-" for stdout')
-@click.option('--actions-output', default=None, type=str,
-              help='The output file for actions. '
-                   'If not provided transactions will not be exported. Use "-" for stdout')
-def export_blocks(start_block, end_block, provider_uri,
-                  max_workers, blocks_output, transactions_output, actions_output):
-    """Export blocks, transactions and actions."""
-
-    if blocks_output is None and transactions_output is None and actions_output is None:
-        raise ValueError('Either --blocks-output or --transactions-output or --actions-output options must be provided')
+@click.option('--output-dir', default=None, type=str,
+              help='The output directory for block data.')
+def export_blocks(start_block, end_block, provider_uri, max_workers, output_dir):
+    """Export block data."""
 
     job = ExportBlocksJob(
         start_block=start_block,
         end_block=end_block,
         tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),
         max_workers=max_workers,
-        item_exporter=blocks_item_exporter(blocks_output, transactions_output, actions_output),
-        export_blocks=blocks_output is not None,
-        export_transactions=transactions_output is not None,
-        export_actions=actions_output is not None)
+        item_exporter=TezosItemExporter(output_dir),
+    )
     job.run()
