@@ -193,8 +193,7 @@ operations_origination (table name)
 ├── storage_limit: INTEGER
 ├── status: STRING
 ├── balance: INTEGER
-├── script_code: STRING
-├── script_storage: STRING
+├── script: STRING
 ├── originated_contracts: STRING (REPEATED)
 ```
 
@@ -275,9 +274,7 @@ operations_transaction (table name)
 ├── status: STRING
 ├── consumed_gas: INTEGER
 ├── storage_size: INTEGER
-├── parameters: STRUCT
-│   ├── entrypoint: STRING
-│   ├── value: STRING
+├── parameters: STRING
 ```
 
 ### operations
