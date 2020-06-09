@@ -42,10 +42,10 @@ balance_updates (table name)
 ├── category: STRING
 ```
 
-### operations_activate_account
+### activate_account_operations
 
 ```
-operations_activate_account (table name)
+activate_account_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -58,10 +58,10 @@ operations_activate_account (table name)
 ├── secret: STRING
 ```
 
-### operations_ballot
+### ballot_operations
 
 ```
-operations_ballot (table name)
+ballot_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -76,10 +76,10 @@ operations_ballot (table name)
 ├── ballot: STRING
 ```
 
-### operations_delegation
+### delegation_operations
 
 ```
-operations_delegation (table name)
+delegation_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -98,10 +98,10 @@ operations_delegation (table name)
 ├── status: STRING
 ```
 
-### operations_double_baking_evidence
+### double_baking_evidence_operations
 
 ```
-operations_double_baking_evidence (table name)
+double_baking_evidence_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -134,10 +134,10 @@ operations_double_baking_evidence (table name)
 ├── denounced_2_signature: STRING
 ```
 
-### operations_double_endorsement_evidence
+### double_endorsement_evidence_operations
 
 ```
-operations_double_endorsement_evidence (table name)
+double_endorsement_evidence_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -154,10 +154,10 @@ operations_double_endorsement_evidence (table name)
 ├── denounced_2_level: INTEGER
 ```
 
-### operations_endorsement
+### endorsement_operations
 
 ```
-operations_endorsement (table name)
+endorsement_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -171,10 +171,10 @@ operations_endorsement (table name)
 ├── slots: INTEGER (REPEATED)
 ```
 
-### operations_origination
+### origination_operations
 
 ```
-operations_origination (table name)
+origination_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -197,10 +197,10 @@ operations_origination (table name)
 ├── originated_contracts: STRING (REPEATED)
 ```
 
-### operations_proposals
+### proposals_operations
 
 ```
-operations_proposals (table name)
+proposals_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -214,10 +214,10 @@ operations_proposals (table name)
 ├── period: INTEGER
 ```
 
-### operations_reveal
+### reveal_operations
 
 ```
-operations_reveal (table name)
+reveal_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -236,10 +236,10 @@ operations_reveal (table name)
 ├── status: STRING
 ```
 
-### operations_seed_nonce_revelation
+### seed_nonce_revelation_operations
 
 ```
-operations_seed_nonce_revelation (table name)
+seed_nonce_revelation_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
@@ -251,10 +251,10 @@ operations_seed_nonce_revelation (table name)
 ├── nonce: STRING
 ```
 
-### operations_transaction
+### transaction_operations
 
 ```
-operations_transaction (table name)
+transaction_operations (table name)
 ├── level: INTEGER
 ├── timestamp: TIMESTAMP
 ├── block_hash: STRING
