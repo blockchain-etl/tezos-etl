@@ -56,7 +56,8 @@ def map_base_operation(block, operation_group_id, operation_id, operation, opera
         'signature': operation.get('signature'),
         'operation_hash': operation.get('hash'),
         'operation_group_id': operation_group_id,
-        'operation_id': operation_id
+        'operation_id': operation_id,
+        # 'raw': json_dumps(operation),
     }
 
 

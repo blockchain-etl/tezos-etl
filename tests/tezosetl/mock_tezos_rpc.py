@@ -28,34 +28,9 @@ class MockTezosRpc:
     def __init__(self, read_resource):
         self.read_resource = read_resource
 
-    def batch(self, data):
-        rpc_response = []
-        for req in data:
-            method = req[0]
-            if method == 'getblock':
-                blockhash = req[1]
-                verbosity = req[2] if len(req) > 2 else None
-                file_name = 'rpc_response_{}_{}_{}.json'.format(method, blockhash, verbosity)
-            elif method == 'getrawtransaction':
-                hash = req[1]
-                file_name = 'rpc_response_{}_{}.json'.format(method, hash)
-            else:
-                raise ValueError('Request method {} is unexpected'.format(method))
-            file_content = self.read_resource(file_name)
-            rpc_response.append(json_loads(file_content))
-        return rpc_response
-
-    def getblock(self, blockhash):
-        file_name = 'rpc_response_{}_{}.json'.format("geblock", blockhash)
+    def getblock(self, block_id):
+        file_name = f'rpc_response_getblock_{block_id}.json'
         file_content = self.read_resource(file_name)
-        return json_loads(file_content)
-
-    def getblockcount(self):
-        file_content = self.read_resource('rpc_response_getblockcount.json')
-        return file_content
-
-    def get_info(self):
-        file_content = self.read_resource('rpc_response_get_info.json')
         return json_loads(file_content)
 
 

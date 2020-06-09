@@ -48,6 +48,7 @@ def compare_lines_ignore_order(expected, actual):
 
 def read_file(path):
     if not os.path.exists(path):
+        print(f'File {path} not found')
         return ''
     with open(path) as file:
         return file.read()

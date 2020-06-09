@@ -23,7 +23,7 @@
 import decimal
 import json
 
-from tezosetl.rpc.request import make_post_request, make_get_request
+from tezosetl.rpc.request import make_get_request
 
 
 class TezosRpc:
