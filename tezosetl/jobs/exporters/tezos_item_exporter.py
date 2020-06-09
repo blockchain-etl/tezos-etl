@@ -47,9 +47,9 @@ class TezosItemExporter:
             self.export_item(item)
 
     def export_item(self, item):
-        item_type = item.get('type')
+        item_type = item.get('item_type')
         if item_type is None:
-            raise ValueError('"type" key is not found in item {}'.format(repr(item)))
+            raise ValueError('"item_type" key is not found in item {}'.format(repr(item)))
 
         exporter = self._get_exporter_for_item_type(item_type)
         exporter.export_item(item)

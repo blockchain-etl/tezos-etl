@@ -26,7 +26,7 @@ from tezosetl.utils.date_utils import convert_timestr_to_timestamp
 
 def map_block(response):
     block = {}
-    block['type'] = 'block'
+    block['item_type'] = 'block'
     block['protocol'] = response.get('protocol')
     block['chain_id'] = response.get('chain_id')
     block['block_hash'] = response.get('hash')

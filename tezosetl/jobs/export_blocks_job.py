@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+from tezosetl.mappers.balance_update_mapper import map_balance_updates
 from tezosetl.mappers.block_mapper import map_block
 from tezosetl.service.tezos_service import TezosService
 from blockchainetl_common.executors.batch_work_executor import BatchWorkExecutor
@@ -56,29 +57,11 @@ class ExportBlocksJob(BaseJob):
         )
 
     def _export_batch(self, block_number_batch):
-        blocks = self.tezos_service.get_blocks(block_number_batch)
-        for block in blocks:
-            self._export_block(block)
-            # self._export_transactions(block)
-
-    def _export_block(self, block):
-        self.item_exporter.export_item(map_block(block))
-
-    def _export_transactions(self, block):
-        for transaction in block['transactions']:
-            self._export_transaction(transaction, block)
-
-    def _export_transaction(self, transaction, block):
-        transaction_dict = self.transaction_mapper.transaction_to_dict(transaction, block)
-
-        self.item_exporter.export_item(transaction_dict)
-
-        if isinstance(transaction.get('trx'), dict) \
-                and transaction.get('trx').get('transaction') is not None \
-                and transaction.get('trx').get('transaction').get('actions') is not None:
-            for action in transaction.get('trx').get('transaction').get('actions'):
-                action_dict = self.action_mapper.action_to_dict(action, transaction_dict)
-                self.item_exporter.export_item(action_dict)
+        responses = self.tezos_service.get_blocks(block_number_batch)
+        for response in responses:
+            block = map_block(response)
+            self.item_exporter.export_item(block)
+            self.item_exporter.export_items(map_balance_updates(block, response))
 
     def _end(self):
         self.batch_work_executor.shutdown()
