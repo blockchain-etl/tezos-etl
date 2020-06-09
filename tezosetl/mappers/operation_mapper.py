@@ -23,7 +23,6 @@
 import json
 
 from tezosetl.utils.cast_utils import safe_int
-from tezosetl.utils.date_utils import convert_timestr_to_timestamp
 
 
 def map_operations(block, response):
@@ -189,7 +188,7 @@ def map_double_baking_evidence(content, base_operation):
         'denounced_1_level': bh1.get('level'),
         'denounced_1_proto': bh1.get('proto'),
         'denounced_1_predecessor': bh1.get('predecessor'),
-        'denounced_1_timestamp': convert_timestr_to_timestamp(bh1.get('timestamp')),
+        'denounced_1_timestamp': bh1.get('timestamp'),
         'denounced_1_validation_pass': bh1.get('validation_pass'),
         'denounced_1_operations_hash': bh1.get('operations_hash'),
         'denounced_1_fitness': bh1.get('fitness'),
@@ -200,7 +199,7 @@ def map_double_baking_evidence(content, base_operation):
         'denounced_2_level': bh2.get('level'),
         'denounced_2_proto': bh2.get('proto'),
         'denounced_2_predecessor': bh2.get('predecessor'),
-        'denounced_2_timestamp': convert_timestr_to_timestamp(bh2.get('timestamp')),
+        'denounced_2_timestamp': bh2.get('timestamp'),
         'denounced_2_validation_pass': bh2.get('validation_pass'),
         'denounced_2_operations_hash': bh2.get('operations_hash'),
         'denounced_2_fitness': bh2.get('fitness'),

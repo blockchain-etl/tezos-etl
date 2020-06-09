@@ -21,7 +21,6 @@
 # SOFTWARE.
 
 from tezosetl.utils.cast_utils import safe_int
-from tezosetl.utils.date_utils import convert_timestr_to_timestamp
 
 
 def map_block(response):
@@ -42,7 +41,7 @@ def map_block(response):
         block['level'] = header.get('level')
         block['proto'] = header.get('proto')
         block['predecessor'] = header.get('predecessor')
-        block['timestamp'] = convert_timestr_to_timestamp(header.get('timestamp')) * 1000
+        block['timestamp'] = header.get('timestamp')
         block['validation_pass'] = header.get('validation_pass')
         block['operations_hash'] = header.get('operations_hash')
         block['fitness'] = header.get('fitness')
