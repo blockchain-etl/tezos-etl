@@ -21,6 +21,7 @@
 # SOFTWARE.
 from tezosetl.mappers.balance_update_mapper import map_balance_updates
 from tezosetl.mappers.block_mapper import map_block
+from tezosetl.mappers.operation_mapper import map_operations
 from tezosetl.service.tezos_service import TezosService
 from blockchainetl_common.executors.batch_work_executor import BatchWorkExecutor
 from blockchainetl_common.jobs.base_job import BaseJob
@@ -62,6 +63,7 @@ class ExportBlocksJob(BaseJob):
             block = map_block(response)
             self.item_exporter.export_item(block)
             self.item_exporter.export_items(map_balance_updates(block, response))
+            self.item_exporter.export_items(map_operations(block, response))
 
     def _end(self):
         self.batch_work_executor.shutdown()
