@@ -61,7 +61,7 @@ Get block data:
 
 ```bash
 curl -s localhost:8732/chains/main/blocks/4 > block4.json
-curl --insecure https://mainnet-tezos.giganode.io/chains/main/blocks/head
+curl --insecure https://mainnet-tezos.giganode.io/chains/main/blocks/417645
 ```
 
 Get block api schema:

@@ -29,28 +29,34 @@ def map_balance_updates(block, response):
 
 
 def yield_balance_updates(response):
-    metadata = response.get('metadata')
-
     # from block
-    if metadata is not None:
-        balance_updates = metadata.get('balance_updates', [])
-        for balance_update in balance_updates:
-            yield {
-                'type': 'block',
-                'operation_hash': None,
-                'balance_update': balance_update
-            }
+    balance_updates = response.get('metadata', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
+    for balance_update in balance_updates:
+        yield {
+            'type': 'block',
+            'operation_hash': None,
+            'balance_update': balance_update
+        }
 
     # from operations
-    for operation_group in response.get('operations', []):
+    for operation_group in response.get('operations', EMPTY_LIST):
         for operation in operation_group:
             operation_hash = operation.get('hash')
-            for content in operation.get('contents', []):
-                metadata = content.get('metadata')
-                if metadata is not None:
-                    for balance_update in metadata.get('balance_updates', []):
+            for content in operation.get('contents', EMPTY_LIST):
+                balance_updates = content.get('metadata', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
+                for balance_update in balance_updates:
+                    yield {
+                        'type': 'operation',
+                        'operation_hash': operation_hash,
+                        'balance_update': balance_update
+                    }
+
+                # from internal operations
+                for internal_operation in content.get('metadata', EMPTY_OBJECT).get('internal_operation_results', EMPTY_LIST):
+                    balance_updates = internal_operation.get('result', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
+                    for balance_update in balance_updates:
                         yield {
-                            'type': 'operation',
+                            'type': 'internal_operation',
                             'operation_hash': operation_hash,
                             'balance_update': balance_update
                         }
@@ -70,3 +76,7 @@ def map_balance_update(block, balance_update):
         'delegate': balance_update['balance_update'].get('delegate'),
         'category': balance_update['balance_update'].get('category'),
     }
+
+
+EMPTY_OBJECT = {}
+EMPTY_LIST = []

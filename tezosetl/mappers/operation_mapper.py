@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import json
+
 from tezosetl.utils.cast_utils import safe_int
 from tezosetl.utils.date_utils import convert_timestr_to_timestamp
 
@@ -30,32 +32,12 @@ def map_operations(block, response):
             operation_kind = content.get('kind')
             base_operation = map_base_operation(block, operation_group_id, operation_id, operation, operation_kind)
 
-            if operation_kind == 'endorsement':
-                yield transform_endorsement(content, base_operation)
-            elif operation_kind == 'transaction':
-                yield transform_transaction(content, base_operation)
-            elif operation_kind == 'delegation':
-                yield transform_delegation(content, base_operation)
-            elif operation_kind == 'reveal':
-                yield transform_reveal(content, base_operation)
-            elif operation_kind == 'seed_nonce_revelation':
-                yield transform_seed_nonce_revelation(content, base_operation)
-            elif operation_kind == 'activate_account':
-                yield transform_activate_account(content, base_operation)
-            elif operation_kind == 'origination':
-                yield transform_origination(content, base_operation)
-            elif operation_kind == 'proposals':
-                yield transform_proposals(content, base_operation)
-            elif operation_kind == 'double_baking_evidence':
-                yield transform_double_baking_evidence(content, base_operation)
-            elif operation_kind == 'double_endorsement_evidence':
-                yield transform_double_endorsement_evidence(content, base_operation)
-            elif operation_kind == 'ballot':
-                yield transform_ballot(content, base_operation)
-            else:
-                print(content)
-                print(base_operation)
-                raise KeyError(f'Operation kind {operation_kind} not recognized')
+            yield map_operation(operation_kind, content, base_operation)
+
+            metadata = content.get('metadata', EMPTY_OBJECT)
+            for internal_operation_result in metadata.get('internal_operation_results', EMPTY_LIST):
+                internal_operation_kind = internal_operation_result.get('kind')
+                yield map_operation(internal_operation_kind, internal_operation_result, base_operation)
 
 
 def yield_operations(response):
@@ -66,7 +48,7 @@ def yield_operations(response):
 
 def map_base_operation(block, operation_group_id, operation_id, operation, operation_kind):
     return {
-        'item_type': operation_kind + '_operation',
+        'item_type': f'{operation_kind}_operation',
         'level': block.get('level'),
         'timestamp': block.get('timestamp'),
         'block_hash': block.get('block_hash'),
@@ -78,7 +60,34 @@ def map_base_operation(block, operation_group_id, operation_id, operation, opera
     }
 
 
-def transform_endorsement(content, base_operation):
+def map_operation(operation_kind, content, base_operation):
+    if operation_kind == 'endorsement':
+        return map_endorsement(content, base_operation)
+    elif operation_kind == 'transaction':
+        return map_transaction(content, base_operation)
+    elif operation_kind == 'delegation':
+        return map_delegation(content, base_operation)
+    elif operation_kind == 'reveal':
+        return map_reveal(content, base_operation)
+    elif operation_kind == 'seed_nonce_revelation':
+        return map_seed_nonce_revelation(content, base_operation)
+    elif operation_kind == 'activate_account':
+        return map_activate_account(content, base_operation)
+    elif operation_kind == 'origination':
+        return map_origination(content, base_operation)
+    elif operation_kind == 'proposals':
+        return map_proposals(content, base_operation)
+    elif operation_kind == 'double_baking_evidence':
+        return map_double_baking_evidence(content, base_operation)
+    elif operation_kind == 'double_endorsement_evidence':
+        return map_double_endorsement_evidence(content, base_operation)
+    elif operation_kind == 'ballot':
+        return map_ballot(content, base_operation)
+    else:
+        raise KeyError(f'Operation kind {operation_kind} not recognized. {json.dumps(content)}')
+
+
+def map_endorsement(content, base_operation):
     metadata = content.get('metadata', EMPTY_OBJECT)
     return {**base_operation, **{
         'delegate': metadata.get('delegate'),
@@ -87,9 +96,9 @@ def transform_endorsement(content, base_operation):
     }}
 
 
-def transform_transaction(content, base_operation):
-    metadata = content.get('metadata', EMPTY_OBJECT)
-    operation_result = metadata.get('operation_result', EMPTY_OBJECT)
+def map_transaction(content, base_operation):
+    operation_result = get_operation_result(content)
+
     return {**base_operation, **{
         'source': content.get('source'),
         'destination': content.get('destination'),
@@ -98,15 +107,16 @@ def transform_transaction(content, base_operation):
         'counter': safe_int(content.get('counter')),
         'gas_limit': safe_int(content.get('gas_limit')),
         'storage_limit': safe_int(content.get('storage_limit')),
-        'status': metadata.get('operation_result', EMPTY_OBJECT).get('status'),
+        'status': operation_result.get('status'),
         'consumed_gas': safe_int(operation_result.get('consumed_gas')),
         'storage_size': safe_int(operation_result.get('storage_size')),
+        'parameters': json_dumps(content.get('parameters')) if content.get('parameters') is not None else None,
     }}
 
 
-def transform_delegation(content, base_operation):
-    metadata = content.get('metadata', EMPTY_OBJECT)
-    operation_result = metadata.get('operation_result', EMPTY_OBJECT)
+def map_delegation(content, base_operation):
+    operation_result = get_operation_result(content)
+
     return {**base_operation, **{
         'source': content.get('source'),
         'delegate': content.get('delegate'),
@@ -118,9 +128,9 @@ def transform_delegation(content, base_operation):
     }}
 
 
-def transform_reveal(content, base_operation):
-    metadata = content.get('metadata', EMPTY_OBJECT)
-    operation_result = metadata.get('operation_result', EMPTY_OBJECT)
+def map_reveal(content, base_operation):
+    operation_result = get_operation_result(content)
+
     return {**base_operation, **{
         'source': content.get('source'),
         'fee': safe_int(content.get('fee')),
@@ -132,22 +142,22 @@ def transform_reveal(content, base_operation):
     }}
 
 
-def transform_seed_nonce_revelation(content, base_operation):
+def map_seed_nonce_revelation(content, base_operation):
     return {**base_operation, **{
         'nonce': content.get('nonce')
     }}
 
 
-def transform_activate_account(content, base_operation):
+def map_activate_account(content, base_operation):
     return {**base_operation, **{
         'public_key_hash': content.get('pkh'),
         'secret': content.get('secret')
     }}
 
 
-def transform_origination(content, base_operation):
-    metadata = content.get('metadata', EMPTY_OBJECT)
-    operation_result = metadata.get('operation_result', EMPTY_OBJECT)
+def map_origination(content, base_operation):
+    operation_result = get_operation_result(content)
+
     return {**base_operation, **{
         'source': content.get('source'),
         'delegate': content.get('delegate'),
@@ -157,12 +167,13 @@ def transform_origination(content, base_operation):
         'gas_limit': safe_int(content.get('gas_limit')),
         'storage_limit': safe_int(content.get('storage_limit')),
         'balance': safe_int(content.get('balance')),
-        'status': content.get('metadata').get('operation_result').get('status'),
+        'status': operation_result.get('status'),
         'originated_contracts': operation_result.get('originated_contracts'),
+        'script': json_dumps(content.get('script')) if content.get('script') is not None else None
     }}
 
 
-def transform_proposals(content, base_operation):
+def map_proposals(content, base_operation):
     return {**base_operation, **{
         'source': content.get('source'),
         'proposals': content.get('proposals'),
@@ -170,7 +181,7 @@ def transform_proposals(content, base_operation):
     }}
 
 
-def transform_double_baking_evidence(content, base_operation):
+def map_double_baking_evidence(content, base_operation):
     bh1 = content.get('bh1', EMPTY_OBJECT)
     bh2 = content.get('bh2', EMPTY_OBJECT)
     return {**base_operation, **{
@@ -199,7 +210,7 @@ def transform_double_baking_evidence(content, base_operation):
     }}
 
 
-def transform_double_endorsement_evidence(content, base_operation):
+def map_double_endorsement_evidence(content, base_operation):
     op1 = content.get('op1', EMPTY_OBJECT)
     op2 = content.get('op2', EMPTY_OBJECT)
     return {**base_operation, **{
@@ -212,13 +223,31 @@ def transform_double_endorsement_evidence(content, base_operation):
     }}
 
 
-def transform_ballot(content, base_operation):
+def map_ballot(content, base_operation):
     return {**base_operation, **{
         'source': content.get('source'),
         'proposal': content.get('proposal'),
         'period': content.get('period'),
         'ballot': content.get('ballot'),
     }}
+
+
+def get_operation_result(content):
+    # TODO: Remove it after testing
+    if content.get('internal_operation_results') is not None:
+        raise ValueError(f'content {json.dumps(content)}')
+
+    metadata = content.get('metadata', EMPTY_OBJECT)
+    if metadata.get('operation_result') is not None:
+        return metadata.get('operation_result')
+    elif content.get('result') is not None:
+        return content.get('result')
+    else:
+        return EMPTY_OBJECT
+
+
+def json_dumps(obj):
+    return json.dumps(obj, separators=(',', ':'))
 
 
 EMPTY_OBJECT = {}

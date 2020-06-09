@@ -19,6 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
+
 from tezosetl.mappers.balance_update_mapper import map_balance_updates
 from tezosetl.mappers.block_mapper import map_block
 from tezosetl.mappers.operation_mapper import map_operations
@@ -28,7 +29,7 @@ from blockchainetl_common.jobs.base_job import BaseJob
 from blockchainetl_common.utils import validate_range
 
 
-# Exports blocks, transactions and actions
+# Exports blocks, balance updates and operations
 class ExportBlocksJob(BaseJob):
     def __init__(
             self,
