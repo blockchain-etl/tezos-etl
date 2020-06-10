@@ -30,8 +30,9 @@ from blockchainetl_common.file_utils import get_file_handle, close_silently
 
 
 class TezosItemExporter:
-    def __init__(self, output_dir):
+    def __init__(self, output_dir, item_type_to_filename=lambda item_type: item_type + 's.json'):
         self.output_dir = output_dir
+        self.item_type_to_filename = item_type_to_filename
         self.exporter_mapping = {}
         self.file_mapping = {}
         self.counter_mapping = {}
@@ -61,7 +62,7 @@ class TezosItemExporter:
         if self.exporter_mapping.get(item_type) is None:
             with self.init_lock:
                 if self.exporter_mapping.get(item_type) is None:
-                    filename = os.path.join(self.output_dir, item_type + '.json')
+                    filename = os.path.join(self.output_dir, self.item_type_to_filename(item_type))
                     file = get_file_handle(filename, binary=True)
                     self.file_mapping[item_type] = file
                     self.exporter_mapping[item_type] = JsonLinesItemExporter(file)

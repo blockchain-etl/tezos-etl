@@ -59,8 +59,8 @@ def test_export_blocks_job(tmpdir, start_block, end_block, resource_group, provi
     )
     job.run()
 
-    all_files = ['block.json', 'balance_update.json'] + \
-                [f'{operation_type}_operation.json' for operation_type in OperationType.ALL]
+    all_files = ['blocks.json', 'balance_updates.json'] + \
+                [f'{operation_type}_operations.json' for operation_type in OperationType.ALL]
 
     for file in all_files:
         print('=====================')

@@ -16,17 +16,10 @@ Export blocks, transactions and actions ([Schema](#schema), [Reference](#export_
 --blocks-output blocks.json --transactions-output transactions.json --actions-output actions.json
 ```
 
-Stream blockchain data continually to console:
-
-```bash
-> pip install tezos-etl[streaming]
-> tezosetl stream -p https://mainnet-tezos.giganode.io --start-block 500000
-```
-
 For the latest version, check out the repo and call 
 ```bash
 > pip install -e .
-> python tezosetl.py
+> python tezosetl.pyo
 ```
 
 ### Running Tests
