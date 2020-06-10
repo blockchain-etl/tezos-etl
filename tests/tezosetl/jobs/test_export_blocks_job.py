@@ -22,7 +22,7 @@
 
 import pytest
 
-from tezosetl.enums.operations_types import OperationType
+from tezosetl.enums.operation_types import OperationType
 from tezosetl.jobs.export_blocks_job import ExportBlocksJob
 from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tests.tezosetl.helpers import get_tezos_rpc
@@ -41,6 +41,10 @@ def read_resource(resource_group, file_name):
 @pytest.mark.parametrize("start_block, end_block, resource_group ,provider_type", [
     (417645, 417645, 'tezos/block_417645', 'mock'),
     skip_if_slow_tests_disabled([417645, 417645, 'tezos/block_417645', 'online']),
+    (889027, 889027, 'tezos/block_889027', 'mock'),
+    skip_if_slow_tests_disabled([889027, 889027, 'tezos/block_889027', 'online']),
+    (979686, 979686, 'tezos/block_979686', 'mock'),
+    skip_if_slow_tests_disabled([979686, 979686, 'tezos/block_979686', 'online']),
 ])
 def test_export_blocks_job(tmpdir, start_block, end_block, resource_group, provider_type):
     job = ExportBlocksJob(
