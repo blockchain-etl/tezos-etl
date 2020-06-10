@@ -4,7 +4,7 @@
 blocks (table name)
 ├── level: INTEGER
 ├── proto: INTEGER
-├── predecessor: INTEGER
+├── predecessor: STRING
 ├── timestamp: TIMESTAMP
 ├── validation_pass: INTEGER
 ├── operations_hash: STRING
@@ -113,7 +113,7 @@ double_baking_evidence_operations (table name)
 ├── denounced_1_level: INTEGER
 ├── denounced_1_proto: INTEGER
 ├── denounced_1_predecessor: STRING
-├── denounced_1_timestamp: INTEGER
+├── denounced_1_timestamp: TIMESTAMP
 ├── denounced_1_validation_pass: INTEGER
 ├── denounced_1_operations_hash: STRING
 ├── denounced_1_fitness: STRING (REPEATED)
@@ -124,7 +124,7 @@ double_baking_evidence_operations (table name)
 ├── denounced_2_level: INTEGER
 ├── denounced_2_proto: INTEGER
 ├── denounced_2_predecessor: STRING
-├── denounced_2_timestamp: INTEGER
+├── denounced_2_timestamp: TIMESTAMP
 ├── denounced_2_validation_pass: INTEGER
 ├── denounced_2_operations_hash: STRING
 ├── denounced_2_fitness: STRING (REPEATED)
