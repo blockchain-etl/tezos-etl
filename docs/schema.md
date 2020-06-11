@@ -263,19 +263,3 @@ consumed_gas: INTEGER
 storage_size: INTEGER
 parameters: STRING
 ```
-
-### operations
-
-This is a view that combines data from `operations_*` tables above. 
-
-```
-level: INTEGER
-timestamp: TIMESTAMP
-block_hash: STRING
-branch: STRING
-signature: STRING
-operation_hash: STRING
-operation_group_index: INTEGER
-operation_index: INTEGER
-internal_operation_index: INTEGER
-```
