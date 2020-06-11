@@ -16,7 +16,7 @@ pip install tezos-etl
 Export blocks, balance updates and operations ([Schema](docs/schema.md), [Reference](docs/commands.md#export)):
 
 ```bash
-> tezosetl export --start-block 1 --end-block 500000 \
+> tezosetl export --start-block 1 --end-block 100 \
 --provider-uri https://mainnet-tezos.giganode.io --output-dir output
 ```
 
