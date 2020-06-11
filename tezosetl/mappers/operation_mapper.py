@@ -26,26 +26,29 @@ from tezosetl.utils.cast_utils import safe_int
 
 
 def map_operations(block, response):
-    for operation_group_id, operation_id, operation in yield_operations(response):
+    for operation_group_index, operation_index, operation in yield_operations(response):
         for content in operation.get('contents', EMPTY_LIST):
             operation_kind = content.get('kind')
-            base_operation = map_base_operation(block, operation_group_id, operation_id, operation, operation_kind)
+            base_operation = map_base_operation(block, operation_group_index, operation_index, operation, operation_kind)
 
             yield map_operation(operation_kind, content, base_operation)
 
             metadata = content.get('metadata', EMPTY_OBJECT)
-            for internal_operation_result in metadata.get('internal_operation_results', EMPTY_LIST):
-                internal_operation_kind = internal_operation_result.get('kind')
-                yield map_operation(internal_operation_kind, internal_operation_result, base_operation)
+            for index, result in enumerate(metadata.get('internal_operation_results', EMPTY_LIST)):
+                base_internal_operation = {**base_operation, **{
+                    'internal_operation_index': index
+                }}
+                internal_operation_kind = result.get('kind')
+                yield map_operation(internal_operation_kind, result, base_internal_operation)
 
 
 def yield_operations(response):
-    for operation_group_id, operation_group in enumerate(response.get('operations', EMPTY_LIST)):
-        for operation_id, operation in enumerate(operation_group):
-            yield operation_group_id, operation_id, operation
+    for operation_group_index, operation_group in enumerate(response.get('operations', EMPTY_LIST)):
+        for operation_index, operation in enumerate(operation_group):
+            yield operation_group_index, operation_index, operation
 
 
-def map_base_operation(block, operation_group_id, operation_id, operation, operation_kind):
+def map_base_operation(block, operation_group_index, operation_index, operation, operation_kind):
     return {
         'item_type': f'{operation_kind}_operation',
         'level': block.get('level'),
@@ -54,8 +57,8 @@ def map_base_operation(block, operation_group_id, operation_id, operation, opera
         'branch': operation.get('branch'),
         'signature': operation.get('signature'),
         'operation_hash': operation.get('hash'),
-        'operation_group_id': operation_group_id,
-        'operation_id': operation_id,
+        'operation_group_index': operation_group_index,
+        'operation_index': operation_index,
         'raw': json_dumps(operation),
     }
 
@@ -216,10 +219,10 @@ def map_double_endorsement_evidence(content, base_operation):
     return {**base_operation, **{
         'denounced_1_branch': op1.get('branch'),
         'denounced_1_signature': op1.get('signature'),
-        'denounced_1_level': op1.get('operations').get('level'),
+        'denounced_1_level': op1.get('operations', EMPTY_OBJECT).get('level'),
         'denounced_2_branch': op2.get('branch'),
         'denounced_2_signature': op2.get('signature'),
-        'denounced_2_level': op2.get('operations').get('level'),
+        'denounced_2_level': op2.get('operations', EMPTY_OBJECT).get('level'),
     }}
 
 
@@ -233,10 +236,6 @@ def map_ballot(content, base_operation):
 
 
 def get_operation_result(content):
-    # TODO: Remove it after testing
-    if content.get('internal_operation_results') is not None:
-        raise ValueError(f'content {json.dumps(content)}')
-
     metadata = content.get('metadata', EMPTY_OBJECT)
     if metadata.get('operation_result') is not None:
         return metadata.get('operation_result')
