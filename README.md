@@ -26,7 +26,7 @@ For the latest version, check out the repo and call
 > python tezosetl.pyo
 ```
 
-### Running Tests
+## Running Tests
 
 ```bash
 > pip install -e .[dev]
