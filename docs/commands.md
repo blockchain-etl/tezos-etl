@@ -19,8 +19,6 @@ Options:
   -h, --help                      Show this message and exit.
 ```
 
-For the `--output` parameters the supported types are csv and json. The format type is inferred from the output file name.
-
 #### export
 
 ```bash
@@ -51,3 +49,5 @@ Export blocks, balance updates and operations partitioned by date.
 > tezosetl get_block_range_for_date --provider-uri=https://mainnet-tezos.giganode.io --date 2020-01-01
 760512,761937
 ```
+
+Retrieves the block range for a given date.
