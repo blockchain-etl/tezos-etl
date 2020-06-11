@@ -1,6 +1,6 @@
 # Overview
 
-Tezos ETL lets you convert blockchain data into convenient formats like JSON, CSV and relational databases.
+Tezos ETL lets you convert blockchain data into convenient formats like JSON and relational databases.
 
 Data is available for you to query right away in Google BigQuery.
 

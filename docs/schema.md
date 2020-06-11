@@ -150,7 +150,6 @@ denounced_2_level: INTEGER
 ### endorsement_operations
 
 ```
-endorsement_operations (table name)
 level: INTEGER
 timestamp: TIMESTAMP
 block_hash: STRING

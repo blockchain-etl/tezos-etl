@@ -23,7 +23,7 @@
 import pytest
 
 from tezosetl.enums.operation_types import OperationType
-from tezosetl.jobs.export_blocks_job import ExportBlocksJob
+from tezosetl.jobs.export_job import ExportJob
 from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tests.tezosetl.helpers import get_tezos_rpc
 from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
@@ -31,7 +31,7 @@ from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
 import tests.resources
 from tests.helpers import compare_lines_ignore_order, read_file, skip_if_slow_tests_disabled
 
-RESOURCE_GROUP = 'test_export_blocks_job'
+RESOURCE_GROUP = 'test_export_job'
 
 
 def read_resource(resource_group, file_name):
@@ -46,8 +46,8 @@ def read_resource(resource_group, file_name):
     (979686, 979686, 'tezos/block_979686', 'mock'),
     skip_if_slow_tests_disabled([979686, 979686, 'tezos/block_979686', 'online']),
 ])
-def test_export_blocks_job(tmpdir, start_block, end_block, resource_group, provider_type):
-    job = ExportBlocksJob(
+def test_export_job(tmpdir, start_block, end_block, resource_group, provider_type):
+    job = ExportJob(
         start_block=start_block,
         end_block=end_block,
         tezos_rpc=ThreadLocalProxy(

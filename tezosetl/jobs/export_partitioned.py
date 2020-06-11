@@ -1,6 +1,6 @@
 # MIT License
 #
-# Copyright (c) 2019 Evgeny Medvedev, evge.medvedev@gmail.com, Vasiliy Bondarenko, vabondarenko@gmail.com
+# Copyright (c) 2020 Evgeny Medvedev, evge.medvedev@gmail.com
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,15 @@ from time import time
 
 from blockchainetl_common.logging_utils import logging_basic_config
 from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
-from tezosetl.jobs.export_blocks_job import ExportBlocksJob
+from tezosetl.jobs.export_job import ExportJob
 from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tezosetl.rpc.tezos_rpc import TezosRpc
 
 logging_basic_config()
-logger = logging.getLogger('export_all')
+logger = logging.getLogger('export_partitioned')
 
 
-def export_all(partitions, output_dir, provider_uri, max_workers, batch_size):
+def export_partitioned(partitions, output_dir, provider_uri, max_workers, batch_size):
     for batch_start_block, batch_end_block, partition_dir, *args in partitions:
         # # # start # # #
 
@@ -46,63 +46,25 @@ def export_all(partitions, output_dir, provider_uri, max_workers, batch_size):
             padded_batch_start_block=padded_batch_start_block,
             padded_batch_end_block=padded_batch_end_block,
         )
-        file_name_suffix = '{padded_batch_start_block}_{padded_batch_end_block}'.format(
-            padded_batch_start_block=padded_batch_start_block,
-            padded_batch_end_block=padded_batch_end_block,
-        )
 
-        # # # blocks_and_transactions # # #
-
-        blocks_output_dir = '{output_dir}/blocks{partition_dir}'.format(
+        partition_output_dir = '{output_dir}/blocks{partition_dir}'.format(
             output_dir=output_dir,
             partition_dir=partition_dir,
         )
-        os.makedirs(os.path.dirname(blocks_output_dir), exist_ok=True)
+        os.makedirs(os.path.dirname(partition_output_dir), exist_ok=True)
 
-        transactions_output_dir = '{output_dir}/transactions{partition_dir}'.format(
-            output_dir=output_dir,
-            partition_dir=partition_dir,
-        )
-        os.makedirs(os.path.dirname(transactions_output_dir), exist_ok=True)
-
-        actions_output_dir = '{output_dir}/actions{partition_dir}'.format(
-            output_dir=output_dir,
-            partition_dir=partition_dir,
-        )
-        os.makedirs(os.path.dirname(actions_output_dir), exist_ok=True)
-
-        blocks_file = '{blocks_output_dir}/blocks_{file_name_suffix}.json'.format(
-            blocks_output_dir=blocks_output_dir,
-            file_name_suffix=file_name_suffix,
-        )
-        transactions_file = '{transactions_output_dir}/transactions_{file_name_suffix}.json'.format(
-            transactions_output_dir=transactions_output_dir,
-            file_name_suffix=file_name_suffix,
-        )
-        actions_file = '{actions_output_dir}/actions_{file_name_suffix}.json'.format(
-            actions_output_dir=actions_output_dir,
-            file_name_suffix=file_name_suffix,
-        )
-        logger.info('Exporting blocks {block_range} to {blocks_file}'.format(
+        logger.info('Exporting blocks {block_range} to {partition_output_dir}'.format(
             block_range=block_range,
-            blocks_file=blocks_file,
-        ))
-        logger.info('Exporting transactions from blocks {block_range} to {transactions_file}'.format(
-            block_range=block_range,
-            transactions_file=transactions_file,
-        ))
-        logger.info('Exporting actions from blocks {block_range} to {actions_file}'.format(
-            block_range=block_range,
-            actions_file=actions_file,
+            partition_output_dir=partition_output_dir,
         ))
 
-        job = ExportBlocksJob(
+        job = ExportJob(
             start_block=batch_start_block,
             end_block=batch_end_block,
             batch_size=batch_size,
             tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),
             max_workers=max_workers,
-            item_exporter=TezosItemExporter(blocks_file),
+            item_exporter=TezosItemExporter(partition_output_dir),
         )
         job.run()
 

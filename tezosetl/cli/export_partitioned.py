@@ -25,7 +25,7 @@ import click
 import re
 
 from datetime import datetime, timedelta
-from tezosetl.jobs.export_all import export_all as do_export_all
+from tezosetl.jobs.export_partitioned import export_partitioned as do_export_partitioned
 from tezosetl.service.tezos_block_range_service import TezosBlockRangeService
 from tezosetl.rpc.tezos_rpc import TezosRpc
 from blockchainetl_common.thread_local_proxy import ThreadLocalProxy
@@ -85,14 +85,16 @@ def get_partitions(start, end, partition_batch_size, provider_uri):
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
 @click.option('-s', '--start', required=True, type=str, help='Start block/ISO date')
 @click.option('-e', '--end', required=True, type=str, help='End block/ISO date')
-@click.option('-b', '--partition-batch-size', default=10000, type=int,
+@click.option('-b', '--partition-batch-size', default=100, show_default=True, type=int,
               help='The number of blocks to export in partition.')
-@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', type=str,
+@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', show_default=True, type=str,
               help='The URI of the remote Tezos node')
-@click.option('-o', '--output-dir', default='output', type=str, help='Output directory, partitioned in Hive style.')
-@click.option('-w', '--max-workers', default=5, type=int, help='The maximum number of workers.')
-@click.option('-B', '--export-batch-size', default=1, type=int, help='The number of requests in JSON RPC batches.')
-def export_all(start, end, partition_batch_size, provider_uri, output_dir, max_workers, export_batch_size):
-    """Exports all data for a range of blocks."""
-    do_export_all(get_partitions(start, end, partition_batch_size, provider_uri),
+@click.option('-o', '--output-dir', default='output', show_default=True, type=str,
+              help='Output directory, partitioned in Hive style.')
+@click.option('-w', '--max-workers', default=5, show_default=True, type=int, help='The maximum number of workers.')
+@click.option('-B', '--export-batch-size', default=1, show_default=True, type=int,
+              help='The number of requests in JSON RPC batches.')
+def export_partitioned(start, end, partition_batch_size, provider_uri, output_dir, max_workers, export_batch_size):
+    """Exports partitioned data for a range of blocks or dates."""
+    do_export_partitioned(get_partitions(start, end, partition_batch_size, provider_uri),
                   output_dir, provider_uri, max_workers, export_batch_size)

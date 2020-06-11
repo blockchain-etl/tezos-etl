@@ -23,7 +23,7 @@
 
 import click
 
-from tezosetl.jobs.export_blocks_job import ExportBlocksJob
+from tezosetl.jobs.export_job import ExportJob
 
 from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tezosetl.rpc.tezos_rpc import TezosRpc
@@ -34,17 +34,16 @@ logging_basic_config()
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('-s', '--start-block', default=0, type=int, help='Start block')
+@click.option('-s', '--start-block', default=0, show_default=True, type=int, help='Start block')
 @click.option('-e', '--end-block', required=True, type=int, help='End block')
-@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', type=str,
+@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', show_default=True, type=str,
               help='The URI of the remote Tezos node')
-@click.option('-w', '--max-workers', default=5, type=int, help='The maximum number of workers.')
-@click.option('--output-dir', default=None, type=str,
-              help='The output directory for block data.')
-def export_blocks(start_block, end_block, provider_uri, max_workers, output_dir):
+@click.option('-w', '--max-workers', default=5, show_default=True, type=int, help='The maximum number of workers.')
+@click.option('-o', '--output-dir', default=None, type=str, help='The output directory for block data.')
+def export(start_block, end_block, provider_uri, max_workers, output_dir):
     """Export block data."""
 
-    job = ExportBlocksJob(
+    job = ExportJob(
         start_block=start_block,
         end_block=end_block,
         tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),

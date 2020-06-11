@@ -13,11 +13,11 @@ Install Tezos ETL:
 pip install tezos-etl
 ```
 
-Export blocks, balance updates and operations ([Schema](docs/schema.md), [Reference](docs/commands.md#export_blocks)):
+Export blocks, balance updates and operations ([Schema](docs/schema.md), [Reference](docs/commands.md#export)):
 
 ```bash
-> tezosetl export_blocks --start-block 1 --end-block 500000 \
---provider-uri https://mainnet-tezos.giganode.io --output_dir output
+> tezosetl export --start-block 1 --end-block 500000 \
+--provider-uri https://mainnet-tezos.giganode.io --output-dir output
 ```
 
 For the latest version, check out the repo and call 
@@ -41,3 +41,16 @@ For the latest version, check out the repo and call
 > pip install tox
 > tox
 ```
+
+## Running in Docker
+
+1. Install Docker https://docs.docker.com/install/
+
+2. Build a docker image:
+        
+        docker build -t tezos-etl:latest .
+        docker image ls
+        
+3. Start the export using the image:
+
+        docker run -v $HOME/output:/tezos-etl/output tezos-etl:latest export_partitioned -s 2018-06-30 -e 2018-07-01 -p https://mainnet-tezos.giganode.io

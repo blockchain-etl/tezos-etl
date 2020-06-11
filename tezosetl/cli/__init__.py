@@ -21,8 +21,8 @@
 
 import click
 
-from tezosetl.cli.export_blocks import export_blocks
-from tezosetl.cli.export_all import export_all
+from tezosetl.cli.export import export
+from tezosetl.cli.export_partitioned import export_partitioned
 from tezosetl.cli.get_block_range_for_date import get_block_range_for_date
 
 
@@ -34,8 +34,8 @@ def cli(ctx):
 
 
 # export
-cli.add_command(export_blocks, "export_blocks")
-cli.add_command(export_all, "export_all")
+cli.add_command(export, "export")
+cli.add_command(export_partitioned, "export_partitioned")
 
 # utils
 cli.add_command(get_block_range_for_date, "get_block_range_for_date")

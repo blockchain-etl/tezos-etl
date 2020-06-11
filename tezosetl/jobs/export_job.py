@@ -30,7 +30,7 @@ from blockchainetl_common.utils import validate_range
 
 
 # Exports blocks, balance updates and operations
-class ExportBlocksJob(BaseJob):
+class ExportJob(BaseJob):
     def __init__(
             self,
             start_block,

@@ -34,7 +34,7 @@ logging_basic_config()
 
 
 @click.command(context_settings=dict(help_option_names=['-h', '--help']))
-@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', type=str,
+@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', show_default=True, type=str,
               help='The URI of the remote Tezos node')
 @click.option('-d', '--date', required=True, type=lambda d: datetime.strptime(d, '%Y-%m-%d'),
               help='The date e.g. 2018-01-01.')
