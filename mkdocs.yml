@@ -1,0 +1,8 @@
+site_name: Tezos ETL
+nav:
+  - Overview: index.md
+  - References:
+    - Commands: commands.md
+    - Schema: schema.md
+theme: readthedocs
+repo_url: https://github.com/blockchain-etl/tezos-etl/
