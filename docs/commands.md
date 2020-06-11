@@ -7,7 +7,7 @@ All the commands accept `-h` parameter for help, e.g.:
 
 Usage: tezosetl export_blocks [OPTIONS]
 
-  Export blocks and transactions.
+  Export blocks, balance updates and operations.
 
 Options:
   -s, --start-block INTEGER   Start block

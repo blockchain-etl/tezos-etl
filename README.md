@@ -2,18 +2,21 @@
 
 [![Build Status](https://travis-ci.org/blockchain-etl/tezos-etl.png)](https://travis-ci.org/blockchain-etl/tezos-etl)
 
+[Full documentation available here](http://tezos-etl.readthedocs.io/).
+
+## Quickstart
+
 Install Tezos ETL:
 
 ```bash
 pip install tezos-etl
 ```
 
-Export blocks, transactions and actions ([Schema](#schema), [Reference](#export_blocks)):
+Export blocks, balance updates and operations ([Schema](docs/schema.md), [Reference](docs/commands.md#export_blocks)):
 
 ```bash
 > tezosetl export_blocks --start-block 1 --end-block 500000 \
---provider-uri https://mainnet-tezos.giganode.io \
---blocks-output blocks.json --transactions-output transactions.json --actions-output actions.json
+--provider-uri https://mainnet-tezos.giganode.io --output_dir output
 ```
 
 For the latest version, check out the repo and call 
@@ -36,36 +39,4 @@ For the latest version, check out the repo and call
 ```bash
 > pip install tox
 > tox
-```
-
----
-
-JSON RPC docs: https://tezos.gitlab.io/developer/rpc.html
-
-Public Tezos node: https://tezos.giganode.io/#startUsing
-
-Get rpc list:
-
-```bash
-tezos-client -S -A mainnet-tezos.giganode.io -P 443 rpc list
-```
-
-Get block data:
-
-```bash
-curl -s localhost:8732/chains/main/blocks/4 > block4.json
-curl --insecure https://mainnet-tezos.giganode.io/chains/main/blocks/417645
-```
-
-Get block api schema:
-
-```bash
-tezos-client rpc schema get /chains/main/blocks/4
-tezos-client -S -A mainnet-tezos.giganode.io -P 443 rpc schema get /chains/main/blocks/979686
-```
-
-Operation types:
-
-```bash
-tezos-client rpc schema post /chains/main/blocks/head/helpers/forge/operations | jq '.input.definitions."operation.alpha.contents".oneOf | .[] | .properties.kind.enum | .[0]'
 ```
