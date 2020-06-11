@@ -34,7 +34,7 @@ logging_basic_config()
 logger = logging.getLogger('export_partitioned')
 
 
-def export_partitioned(partitions, output_dir, provider_uri, max_workers, batch_size):
+def export_partitioned(partitions, output_dir, output_format, provider_uri, max_workers, batch_size):
     for batch_start_block, batch_end_block, partition_dir, *args in partitions:
         # # # start # # #
 
@@ -64,7 +64,7 @@ def export_partitioned(partitions, output_dir, provider_uri, max_workers, batch_
             batch_size=batch_size,
             tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),
             max_workers=max_workers,
-            item_exporter=TezosItemExporter(partition_output_dir),
+            item_exporter=TezosItemExporter(partition_output_dir, output_format=output_format),
         )
         job.run()
 

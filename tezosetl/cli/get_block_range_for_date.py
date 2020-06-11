@@ -40,7 +40,7 @@ logging_basic_config()
               help='The date e.g. 2018-01-01.')
 @click.option('-o', '--output', default='-', type=str, help='The output file. If not specified stdout is used.')
 def get_block_range_for_date(provider_uri, date, output):
-    """Outputs start and end blocks for given date."""
+    """Outputs start and end blocks for a given date."""
 
     tezos_rpc = TezosRpc(provider_uri)
     tezos_service = TezosBlockRangeService(tezos_rpc)

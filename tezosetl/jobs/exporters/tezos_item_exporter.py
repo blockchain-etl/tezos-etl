@@ -25,14 +25,17 @@ import os
 import threading
 
 from blockchainetl_common.atomic_counter import AtomicCounter
-from blockchainetl_common.exporters import JsonLinesItemExporter
+from blockchainetl_common.exporters import JsonLinesItemExporter, CsvItemExporter
 from blockchainetl_common.file_utils import get_file_handle, close_silently
 
 
 class TezosItemExporter:
-    def __init__(self, output_dir, item_type_to_filename=lambda item_type: item_type + 's.json'):
+    def __init__(self, output_dir, item_type_to_filename=None, output_format='json'):
         self.output_dir = output_dir
         self.item_type_to_filename = item_type_to_filename
+        if self.item_type_to_filename is None:
+            self.item_type_to_filename = lambda item_type: f'{item_type}s.{output_format}'
+        self.output_format = output_format
         self.exporter_mapping = {}
         self.file_mapping = {}
         self.counter_mapping = {}
@@ -65,7 +68,7 @@ class TezosItemExporter:
                     filename = os.path.join(self.output_dir, self.item_type_to_filename(item_type))
                     file = get_file_handle(filename, binary=True)
                     self.file_mapping[item_type] = file
-                    self.exporter_mapping[item_type] = JsonLinesItemExporter(file)
+                    self.exporter_mapping[item_type] = get_item_exporter(self.output_format, file)
         return self.exporter_mapping[item_type]
 
     def _get_counter_for_item_type(self, item_type):
@@ -82,3 +85,12 @@ class TezosItemExporter:
             counter = self.counter_mapping[item_type]
             if counter is not None:
                 self.logger.info('{} items exported: {}'.format(item_type, counter.increment() - 1))
+
+
+def get_item_exporter(output_format, file):
+    if output_format == 'json':
+        return JsonLinesItemExporter(file)
+    elif output_format == 'csv':
+        return CsvItemExporter(file)
+    else:
+        ValueError(f'output format {output_format} is not recognized')

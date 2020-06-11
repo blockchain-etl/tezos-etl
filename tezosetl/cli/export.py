@@ -40,14 +40,16 @@ logging_basic_config()
               help='The URI of the remote Tezos node')
 @click.option('-w', '--max-workers', default=5, show_default=True, type=int, help='The maximum number of workers.')
 @click.option('-o', '--output-dir', default=None, type=str, help='The output directory for block data.')
-def export(start_block, end_block, provider_uri, max_workers, output_dir):
-    """Export block data."""
+@click.option('-f', '--output-format', default='json', show_default=True, type=click.Choice(['json', 'csv']),
+              help='The output format.')
+def export(start_block, end_block, provider_uri, max_workers, output_dir, output_format):
+    """Exports blocks, balance updates, and operations."""
 
     job = ExportJob(
         start_block=start_block,
         end_block=end_block,
         tezos_rpc=ThreadLocalProxy(lambda: TezosRpc(provider_uri)),
         max_workers=max_workers,
-        item_exporter=TezosItemExporter(output_dir),
+        item_exporter=TezosItemExporter(output_dir, output_format=output_format),
     )
     job.run()

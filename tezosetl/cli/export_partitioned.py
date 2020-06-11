@@ -91,10 +91,13 @@ def get_partitions(start, end, partition_batch_size, provider_uri):
               help='The URI of the remote Tezos node')
 @click.option('-o', '--output-dir', default='output', show_default=True, type=str,
               help='Output directory, partitioned in Hive style.')
+@click.option('-f', '--output-format', default='json', show_default=True, type=click.Choice(['json', 'csv']),
+              help='The output format.')
 @click.option('-w', '--max-workers', default=5, show_default=True, type=int, help='The maximum number of workers.')
 @click.option('-B', '--export-batch-size', default=1, show_default=True, type=int,
               help='The number of requests in JSON RPC batches.')
-def export_partitioned(start, end, partition_batch_size, provider_uri, output_dir, max_workers, export_batch_size):
+def export_partitioned(start, end, partition_batch_size, provider_uri, output_dir, output_format,
+                       max_workers, export_batch_size):
     """Exports partitioned data for a range of blocks or dates."""
     do_export_partitioned(get_partitions(start, end, partition_batch_size, provider_uri),
-                  output_dir, provider_uri, max_workers, export_batch_size)
+                  output_dir, output_format, provider_uri, max_workers, export_batch_size)

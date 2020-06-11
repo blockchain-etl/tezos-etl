@@ -17,14 +17,14 @@ Export blocks, balance updates and operations ([Schema](docs/schema.md), [Refere
 
 ```bash
 tezosetl export --start-block 1 --end-block 100 \
---provider-uri https://mainnet-tezos.giganode.io --output-dir output
+--provider-uri https://mainnet-tezos.giganode.io --output-dir output --output-format json
 ```
 
 For the latest version, check out the repo and call
  
 ```bash
 pip install -e .
-python tezosetl.pyo
+python tezosetl.py
 ```
 
 ## Running Tests
@@ -55,4 +55,4 @@ tox
 3. Start the export using the image:
 
         docker run -v $HOME/output:/tezos-etl/output tezos-etl:latest export_partitioned \
-        -s 2018-06-30 -e 2018-07-01 -p https://mainnet-tezos.giganode.io
+        -s 2018-06-30 -e 2018-07-01 -p https://mainnet-tezos.giganode.io --output-format csv

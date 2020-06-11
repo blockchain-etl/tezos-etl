@@ -59,6 +59,7 @@ def map_base_operation(block, operation_group_index, operation_index, operation,
         'operation_hash': operation.get('hash'),
         'operation_group_index': operation_group_index,
         'operation_index': operation_index,
+        'internal_operation_index': None,
         'raw': json_dumps(operation),
     }
 
@@ -113,7 +114,7 @@ def map_transaction(content, base_operation):
         'status': operation_result.get('status'),
         'consumed_gas': safe_int(operation_result.get('consumed_gas')),
         'storage_size': safe_int(operation_result.get('storage_size')),
-        'parameters': json_dumps(content.get('parameters')) if content.get('parameters') is not None else None,
+        'parameters': json_dumps(content.get('parameters')),
     }}
 
 
@@ -172,7 +173,7 @@ def map_origination(content, base_operation):
         'balance': safe_int(content.get('balance')),
         'status': operation_result.get('status'),
         'originated_contracts': operation_result.get('originated_contracts'),
-        'script': json_dumps(content.get('script')) if content.get('script') is not None else None
+        'script': json_dumps(content.get('script')),
     }}
 
 
@@ -246,6 +247,8 @@ def get_operation_result(content):
 
 
 def json_dumps(obj):
+    if obj is None:
+        return None
     return json.dumps(obj, separators=(',', ':'))
 
 

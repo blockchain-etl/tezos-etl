@@ -24,43 +24,42 @@ from tezosetl.utils.cast_utils import safe_int
 
 
 def map_block(response):
-    block = {}
-    block['item_type'] = 'block'
-    block['protocol'] = response.get('protocol')
-    block['chain_id'] = response.get('chain_id')
-    block['block_hash'] = response.get('hash')
-
     number_of_operations = 0
     for operation_group in response.get('operations', []):
         number_of_operations += len(operation_group)
-    block['number_of_operation_groups'] = len(response.get('operations', []))
-    block['number_of_operations'] = number_of_operations
 
-    header = response.get('header')
-    if header is not None:
-        block['level'] = header.get('level')
-        block['proto'] = header.get('proto')
-        block['predecessor'] = header.get('predecessor')
-        block['timestamp'] = header.get('timestamp')
-        block['validation_pass'] = header.get('validation_pass')
-        block['operations_hash'] = header.get('operations_hash')
-        block['fitness'] = header.get('fitness')
-        block['context'] = header.get('context')
+    header = response.get('header', EMPTY_OBJECT)
+    metadata = response.get('metadata', EMPTY_OBJECT)
+    level = metadata.get('level', EMPTY_OBJECT)
 
-    metadata = response.get('metadata')
-    if metadata is not None:
-        block['nonce_hash'] = metadata.get('nonce_hash')
-        block['consumed_gas'] = safe_int(metadata.get('consumed_gas'))
-        block['baker'] = metadata.get('baker')
-        block['voting_period_kind'] = metadata.get('voting_period_kind')
-
-        level = metadata.get('level')
-
-        if level is not None:
-            block['cycle'] = level.get('cycle')
-            block['cycle_position'] = level.get('cycle_position')
-            block['voting_period'] = level.get('voting_period')
-            block['voting_period_position'] = level.get('voting_period_position')
-            block['expected_commitment'] = level.get('expected_commitment')
+    block = {
+        'item_type': 'block',
+        'protocol': response.get('protocol'),
+        'chain_id': response.get('chain_id'),
+        'block_hash': response.get('hash'),
+        'number_of_operation_groups': len(response.get('operations', [])),
+        'number_of_operations': number_of_operations,
+        'level': header.get('level'),
+        'proto': header.get('proto'),
+        'predecessor': header.get('predecessor'),
+        'timestamp': header.get('timestamp'),
+        'validation_pass': header.get('validation_pass'),
+        'operations_hash': header.get('operations_hash'),
+        'fitness': header.get('fitness'),
+        'context': header.get('context'),
+        'nonce_hash': metadata.get('nonce_hash'),
+        'consumed_gas': safe_int(metadata.get('consumed_gas')),
+        'baker': metadata.get('baker'),
+        'voting_period_kind': metadata.get('voting_period_kind'),
+        'cycle': level.get('cycle'),
+        'cycle_position': level.get('cycle_position'),
+        'voting_period': level.get('voting_period'),
+        'voting_period_position': level.get('voting_period_position'),
+        'expected_commitment': level.get('expected_commitment')
+    }
 
     return block
+
+
+EMPTY_OBJECT = {}
+EMPTY_LIST = []
