@@ -1,6 +1,7 @@
 # Tezos ETL
 
 [![Build Status](https://travis-ci.org/blockchain-etl/tezos-etl.png)](https://travis-ci.org/blockchain-etl/tezos-etl)
+[![Documentation Status](https://readthedocs.org/projects/tezos-etl/badge/?version=latest)](https://tezos-etl.readthedocs.io/en/latest/?badge=latest)
 
 [Full documentation available here](http://tezos-etl.readthedocs.io/).
 
