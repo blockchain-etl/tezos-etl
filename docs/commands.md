@@ -3,7 +3,7 @@
 All commands accept `-h` parameter for help, e.g.:
 
 ```bash
-> tezosetl export -h
+tezosetl export -h
 
 Usage: tezosetl export [OPTIONS]
 
@@ -22,7 +22,7 @@ Options:
 #### export
 
 ```bash
-> tezosetl export --start-block 0 --end-block 100 \
+tezosetl export --start-block 0 --end-block 100 \
 --provider-uri https://mainnet-tezos.giganode.io --output-dir output 
 ```
 
@@ -35,7 +35,7 @@ You can tune `--max-workers` for performance.
 #### export_partitioned
 
 ```bash
-> tezosetl export_partitioned --start 2018-06-30 --end 2018-06-31 \
+tezosetl export_partitioned --start 2018-06-30 --end 2018-06-31 \
 --provider-uri https://mainnet-tezos.giganode.io --output-dir output 
 ```
 
@@ -46,7 +46,7 @@ Export blocks, balance updates and operations partitioned by date.
 #### get_block_range_for_date
 
 ```bash
-> tezosetl get_block_range_for_date --provider-uri=https://mainnet-tezos.giganode.io --date 2020-01-01
+tezosetl get_block_range_for_date --provider-uri=https://mainnet-tezos.giganode.io --date 2020-01-01
 760512,761937
 ```
 
