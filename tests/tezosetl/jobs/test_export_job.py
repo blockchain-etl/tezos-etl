@@ -22,7 +22,7 @@
 
 import pytest
 
-from tezosetl.enums.operation_types import OperationType
+from tezosetl.enums.operation_kinds import OperationKind
 from tezosetl.jobs.export_job import ExportJob
 from tezosetl.jobs.exporters.tezos_item_exporter import TezosItemExporter
 from tests.tezosetl.helpers import get_tezos_rpc
@@ -60,7 +60,7 @@ def test_export_job(tmpdir, start_block, end_block, resource_group, provider_typ
     job.run()
 
     all_files = ['blocks.json', 'balance_updates.json'] + \
-                [f'{operation_type}_operations.json' for operation_type in OperationType.ALL]
+                [f'{operation_kind}_operations.json' for operation_kind in OperationKind.ALL]
 
     for file in all_files:
         print('=====================')

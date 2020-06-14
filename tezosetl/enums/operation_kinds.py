@@ -1,4 +1,4 @@
-class OperationType:
+class OperationKind:
     activate_account = 'activate_account'
     ballot = 'ballot'
     delegation = 'delegation'
