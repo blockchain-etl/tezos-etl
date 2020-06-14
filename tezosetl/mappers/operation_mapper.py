@@ -22,6 +22,7 @@
 
 import json
 
+from tezosetl.enums.operation_kinds import OperationKind
 from tezosetl.utils.cast_utils import safe_int
 
 
@@ -65,27 +66,27 @@ def map_base_operation(block, operation_group_index, operation_index, operation,
 
 
 def map_operation(operation_kind, content, base_operation):
-    if operation_kind == 'endorsement':
+    if operation_kind == OperationKind.endorsement:
         return map_endorsement(content, base_operation)
-    elif operation_kind == 'transaction':
+    elif operation_kind == OperationKind.transaction:
         return map_transaction(content, base_operation)
-    elif operation_kind == 'delegation':
+    elif operation_kind == OperationKind.delegation:
         return map_delegation(content, base_operation)
-    elif operation_kind == 'reveal':
+    elif operation_kind == OperationKind.reveal:
         return map_reveal(content, base_operation)
-    elif operation_kind == 'seed_nonce_revelation':
+    elif operation_kind == OperationKind.seed_nonce_revelation:
         return map_seed_nonce_revelation(content, base_operation)
-    elif operation_kind == 'activate_account':
+    elif operation_kind == OperationKind.activate_account:
         return map_activate_account(content, base_operation)
-    elif operation_kind == 'origination':
+    elif operation_kind == OperationKind.origination:
         return map_origination(content, base_operation)
-    elif operation_kind == 'proposals':
+    elif operation_kind == OperationKind.proposals:
         return map_proposals(content, base_operation)
-    elif operation_kind == 'double_baking_evidence':
+    elif operation_kind == OperationKind.double_baking_evidence:
         return map_double_baking_evidence(content, base_operation)
-    elif operation_kind == 'double_endorsement_evidence':
+    elif operation_kind == OperationKind.double_endorsement_evidence:
         return map_double_endorsement_evidence(content, base_operation)
-    elif operation_kind == 'ballot':
+    elif operation_kind == OperationKind.ballot:
         return map_ballot(content, base_operation)
     else:
         raise KeyError(f'Operation kind {operation_kind} not recognized. {json.dumps(content)}')
