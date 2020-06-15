@@ -28,9 +28,12 @@ from tezosetl.utils.cast_utils import safe_int
 
 def map_operations(block, response):
     for operation_group_index, operation_index, operation in yield_operations(response):
-        for content in operation.get('contents', EMPTY_LIST):
+        for content_index, content in enumerate(operation.get('contents', EMPTY_LIST)):
             operation_kind = content.get('kind')
-            base_operation = map_base_operation(block, operation_group_index, operation_index, operation, operation_kind)
+
+            base_operation = map_base_operation(
+                block, operation_group_index, operation_index, content_index, operation, operation_kind
+            )
 
             yield map_operation(operation_kind, content, base_operation)
 
@@ -49,7 +52,7 @@ def yield_operations(response):
             yield operation_group_index, operation_index, operation
 
 
-def map_base_operation(block, operation_group_index, operation_index, operation, operation_kind):
+def map_base_operation(block, operation_group_index, operation_index, content_index, operation, operation_kind):
     return {
         'item_type': f'{operation_kind}_operation',
         'level': block.get('level'),
@@ -60,8 +63,8 @@ def map_base_operation(block, operation_group_index, operation_index, operation,
         'operation_hash': operation.get('hash'),
         'operation_group_index': operation_group_index,
         'operation_index': operation_index,
+        'content_index': content_index,
         'internal_operation_index': None,
-        'raw': json_dumps(operation),
     }
 
 
