@@ -34,30 +34,37 @@ def yield_balance_updates(response):
     for balance_update in balance_updates:
         yield {
             'type': 'block',
-            'operation_hash': None,
             'balance_update': balance_update
         }
 
     # from operations
-    for operation_group in response.get('operations', EMPTY_LIST):
-        for operation in operation_group:
+    for operation_group_index, operation_group in enumerate(response.get('operations', EMPTY_LIST)):
+        for operation_index, operation in enumerate(operation_group):
             operation_hash = operation.get('hash')
-            for content in operation.get('contents', EMPTY_LIST):
+            for content_index, content in enumerate(operation.get('contents', EMPTY_LIST)):
                 balance_updates = content.get('metadata', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
                 for balance_update in balance_updates:
                     yield {
                         'type': 'operation',
                         'operation_hash': operation_hash,
+                        'operation_group_index': operation_group_index,
+                        'operation_index': operation_index,
+                        'content_index': content_index,
                         'balance_update': balance_update
                     }
 
                 # from internal operations
-                for internal_operation in content.get('metadata', EMPTY_OBJECT).get('internal_operation_results', EMPTY_LIST):
+                internal_operation_results = content.get('metadata', EMPTY_OBJECT).get('internal_operation_results', EMPTY_LIST)
+                for internal_operation_index, internal_operation in enumerate(internal_operation_results):
                     balance_updates = internal_operation.get('result', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
                     for balance_update in balance_updates:
                         yield {
-                            'type': 'internal_operation',
+                            'type': 'operation',
                             'operation_hash': operation_hash,
+                            'operation_group_index': operation_group_index,
+                            'operation_index': operation_index,
+                            'content_index': content_index,
+                            'internal_operation_index': internal_operation_index,
                             'balance_update': balance_update
                         }
 
@@ -70,6 +77,10 @@ def map_balance_update(block, balance_update):
         'block_hash': block.get('block_hash'),
         'type': balance_update.get('type'),
         'operation_hash': balance_update.get('operation_hash'),
+        'operation_group_index': balance_update.get('operation_group_index'),
+        'operation_index': balance_update.get('operation_index'),
+        'content_index': balance_update.get('content_index'),
+        'internal_operation_index': balance_update.get('internal_operation_index'),
         'kind': balance_update['balance_update'].get('kind'),
         'contract': balance_update['balance_update'].get('contract'),
         'change': safe_int(balance_update['balance_update'].get('change')),

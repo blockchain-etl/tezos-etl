@@ -33,6 +33,10 @@ timestamp: TIMESTAMP
 block_hash: STRING
 type: STRING
 operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 kind: STRING
 contract: STRING
 change: INTEGER
@@ -51,6 +55,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 public_key_hash: STRING
 secret: STRING
 ```
@@ -66,6 +72,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 period: INTEGER
 source: STRING
 proposal: STRING
@@ -83,7 +91,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
-internal_operation_index: STRING
+content_index: INTEGER
+internal_operation_index: INTEGER
 source: STRING
 delegate: STRING
 fee: INTEGER
@@ -104,6 +113,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 denounced_1_level: INTEGER
 denounced_1_proto: INTEGER
 denounced_1_predecessor: STRING
@@ -139,6 +150,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 denounced_1_branch: STRING
 denounced_1_signature: STRING
 denounced_1_level: INTEGER
@@ -158,6 +171,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 delegate: STRING
 public_key: STRING
 slots: INTEGER (REPEATED)
@@ -174,7 +189,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
-internal_operation_index: STRING
+content_index: INTEGER
+internal_operation_index: INTEGER
 source: STRING
 delegate: STRING
 manager_public_key: STRING
@@ -199,6 +215,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 source: STRING
 proposals: STRING (REPEATED)
 period: INTEGER
@@ -215,7 +233,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
-internal_operation_index: STRING
+content_index: INTEGER
+internal_operation_index: INTEGER
 source: STRING
 public_key: STRING
 fee: INTEGER
@@ -236,6 +255,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
 nonce: STRING
 ```
 
@@ -250,7 +271,8 @@ signature: STRING
 operation_hash: STRING
 operation_group_index: INTEGER
 operation_index: INTEGER
-internal_operation_index: STRING
+content_index: INTEGER
+internal_operation_index: INTEGER
 source: STRING
 destination: STRING
 fee: INTEGER

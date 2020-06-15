@@ -20,7 +20,7 @@ tezosetl export --start-block 1 --end-block 100 \
 --provider-uri https://mainnet-tezos.giganode.io --output-dir output --output-format json
 ```
 
-For the latest version, check out the repo and call
+For the latest version, checkout the repo and call
  
 ```bash
 pip install -e .
