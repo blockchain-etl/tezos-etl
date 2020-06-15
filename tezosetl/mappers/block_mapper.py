@@ -24,9 +24,7 @@ from tezosetl.utils.cast_utils import safe_int
 
 
 def map_block(response):
-    number_of_operations = 0
-    for operation_group in response.get('operations', []):
-        number_of_operations += len(operation_group)
+    number_of_operations = count_operations(response.get('operations', EMPTY_LIST))
 
     header = response.get('header', EMPTY_OBJECT)
     metadata = response.get('metadata', EMPTY_OBJECT)
@@ -37,7 +35,7 @@ def map_block(response):
         'protocol': response.get('protocol'),
         'chain_id': response.get('chain_id'),
         'block_hash': response.get('hash'),
-        'number_of_operation_groups': len(response.get('operations', [])),
+        'number_of_operation_groups': len(response.get('operations', EMPTY_LIST)),
         'number_of_operations': number_of_operations,
         'level': header.get('level'),
         'proto': header.get('proto'),
@@ -59,6 +57,20 @@ def map_block(response):
     }
 
     return block
+
+
+def count_operations(operation_groups):
+    number_of_operations = 0
+    for operation_group in operation_groups:
+        for operation in operation_group:
+            number_of_operations += len(operation.get('contents', EMPTY_LIST))
+
+            # Add internal operations
+            for content in operation.get('contents', EMPTY_LIST):
+                metadata = content.get('metadata', EMPTY_OBJECT)
+                number_of_operations += len(metadata.get('internal_operation_results', EMPTY_LIST))
+
+    return number_of_operations
 
 
 EMPTY_OBJECT = {}
