@@ -36,7 +36,7 @@ Options:
                                   https://mainnet-tezos.giganode.io]
   -w, --max-workers INTEGER       The maximum number of workers.  [default: 5]
   -o, --output-dir TEXT           The output directory for block data.
-  -o, --output-format [json|csv]  The output format.  [default: json]
+  -f, --output-format [json|csv]  The output format.  [default: json]
   -h, --help                      Show this message and exit.
 ```
 
@@ -62,7 +62,7 @@ Options:
                                   https://mainnet-tezos.giganode.io]
   -o, --output-dir TEXT           Output directory, partitioned in Hive style.
                                   [default: output]
-  -o, --output-format [json|csv]  The output format.  [default: json]
+  -f, --output-format [json|csv]  The output format.  [default: json]
   -w, --max-workers INTEGER       The maximum number of workers.  [default: 5]
   -B, --export-batch-size INTEGER
                                   The number of requests in JSON RPC batches.
