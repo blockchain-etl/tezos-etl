@@ -42,8 +42,10 @@ def yield_balance_updates(response):
         for operation_index, operation in enumerate(operation_group):
             operation_hash = operation.get('hash')
             for content_index, content in enumerate(operation.get('contents', EMPTY_LIST)):
-                balance_updates = content.get('metadata', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
-                for balance_update in balance_updates:
+                metadata = content.get('metadata', EMPTY_OBJECT)
+                metadata_balance_updates = metadata.get('balance_updates', EMPTY_LIST)
+                operation_result_balance_updates = metadata.get('operation_result', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
+                for balance_update in metadata_balance_updates + operation_result_balance_updates:
                     yield {
                         'type': 'operation',
                         'operation_hash': operation_hash,
