@@ -37,6 +37,7 @@ operation_group_index: INTEGER
 operation_index: INTEGER
 content_index: INTEGER
 internal_operation_index: INTEGER
+balance_update_index: INTEGER
 kind: STRING
 contract: STRING
 change: INTEGER

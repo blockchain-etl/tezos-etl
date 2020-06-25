@@ -31,10 +31,11 @@ def map_balance_updates(block, response):
 def yield_balance_updates(response):
     # from block
     balance_updates = response.get('metadata', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
-    for balance_update in balance_updates:
+    for balance_update_index, balance_update in enumerate(balance_updates):
         yield {
             'type': 'block',
-            'balance_update': balance_update
+            'balance_update': balance_update,
+            'balance_update_index': balance_update_index,
         }
 
     # from operations
@@ -44,14 +45,27 @@ def yield_balance_updates(response):
             for content_index, content in enumerate(operation.get('contents', EMPTY_LIST)):
                 metadata = content.get('metadata', EMPTY_OBJECT)
                 metadata_balance_updates = metadata.get('balance_updates', EMPTY_LIST)
-                operation_result_balance_updates = metadata.get('operation_result', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
-                for balance_update in metadata_balance_updates + operation_result_balance_updates:
+                for balance_update_index, balance_update in enumerate(metadata_balance_updates):
                     yield {
-                        'type': 'operation',
+                        'type': 'metadata',
                         'operation_hash': operation_hash,
                         'operation_group_index': operation_group_index,
                         'operation_index': operation_index,
                         'content_index': content_index,
+                        'balance_update_index': balance_update_index,
+                        'balance_update': balance_update
+                    }
+
+                operation_result_balance_updates = metadata.get('operation_result', EMPTY_OBJECT)\
+                    .get('balance_updates', EMPTY_LIST)
+                for balance_update_index, balance_update in enumerate(operation_result_balance_updates):
+                    yield {
+                        'type': 'operation_result',
+                        'operation_hash': operation_hash,
+                        'operation_group_index': operation_group_index,
+                        'operation_index': operation_index,
+                        'content_index': content_index,
+                        'balance_update_index': balance_update_index,
                         'balance_update': balance_update
                     }
 
@@ -59,14 +73,15 @@ def yield_balance_updates(response):
                 internal_operation_results = content.get('metadata', EMPTY_OBJECT).get('internal_operation_results', EMPTY_LIST)
                 for internal_operation_index, internal_operation in enumerate(internal_operation_results):
                     balance_updates = internal_operation.get('result', EMPTY_OBJECT).get('balance_updates', EMPTY_LIST)
-                    for balance_update in balance_updates:
+                    for balance_update_index, balance_update in enumerate(balance_updates):
                         yield {
-                            'type': 'operation',
+                            'type': 'internal_operation_result',
                             'operation_hash': operation_hash,
                             'operation_group_index': operation_group_index,
                             'operation_index': operation_index,
                             'content_index': content_index,
                             'internal_operation_index': internal_operation_index,
+                            'balance_update_index': balance_update_index,
                             'balance_update': balance_update
                         }
 
@@ -83,6 +98,7 @@ def map_balance_update(block, balance_update):
         'operation_index': balance_update.get('operation_index'),
         'content_index': balance_update.get('content_index'),
         'internal_operation_index': balance_update.get('internal_operation_index'),
+        'balance_update_index': balance_update.get('balance_update_index'),
         'kind': balance_update['balance_update'].get('kind'),
         'contract': balance_update['balance_update'].get('contract'),
         'change': safe_int(balance_update['balance_update'].get('change')),
