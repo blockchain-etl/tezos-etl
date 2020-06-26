@@ -47,7 +47,7 @@ def yield_balance_updates(response):
                 metadata_balance_updates = metadata.get('balance_updates', EMPTY_LIST)
                 for balance_update_index, balance_update in enumerate(metadata_balance_updates):
                     yield {
-                        'type': 'metadata',
+                        'type': 'operation_metadata',
                         'operation_hash': operation_hash,
                         'operation_group_index': operation_group_index,
                         'operation_index': operation_index,
