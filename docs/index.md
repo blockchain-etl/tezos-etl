@@ -6,8 +6,6 @@ Data is available for you to query right away in [Google BigQuery](https://conso
 
 ## Features
 
-Easily export:
-
-* Blocks
-* Balance Updates
-* Operations
+* Easily export: blocks, balance updates, operations.
+* Supported formats: CSV, JSON newline-delimited files.
+* Partitioning by date.

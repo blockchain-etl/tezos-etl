@@ -26,7 +26,7 @@ tezosetl export --start-block 0 --end-block 100 \
 --provider-uri https://mainnet-tezos.giganode.io --output-dir output 
 ```
 
-Exports blocks, balance updates, and operations.
+Exports blocks, balance updates, and operations to individual files in the folder specified in `--output-dir`.
 
 ```
 Options:
