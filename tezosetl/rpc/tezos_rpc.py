@@ -34,7 +34,8 @@ class TezosRpc:
 
     def get(self, endpoint):
         raw_response = make_get_request(
-            self.provider_uri + endpoint,
+            self.provider_uri,
+            endpoint,
             timeout=self.timeout
         )
 

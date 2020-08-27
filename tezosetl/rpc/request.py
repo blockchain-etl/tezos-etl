@@ -21,10 +21,10 @@ def make_post_request(endpoint_uri, data, *args, **kwargs):
     return response.content
 
 
-def make_get_request(endpoint_uri, *args, **kwargs):
+def make_get_request(url, path, *args, **kwargs):
     kwargs.setdefault('timeout', 10)
-    session = _get_session(endpoint_uri)
-    response = session.get(endpoint_uri, *args, **kwargs)
+    session = _get_session(url)
+    response = session.get(url + path, *args, **kwargs)
     response.raise_for_status()
 
     return response.content
