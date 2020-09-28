@@ -287,3 +287,14 @@ consumed_gas: INTEGER
 storage_size: INTEGER
 parameters: STRING
 ```
+
+### migrations
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+kind: STRING
+address: STRING
+balance_change: INTEGER
+```
