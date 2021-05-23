@@ -198,7 +198,7 @@ endorsement_branch: STRING
 endorsement_signature: STRING
 operations_kind: STRING
 operations_level: INTEGER
-slot``: INTEGER
+slot: INTEGER
 slots: INTEGER (REPEATED)
 ```
 
