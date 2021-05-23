@@ -5,6 +5,7 @@ class OperationKind:
     double_baking_evidence = 'double_baking_evidence'
     double_endorsement_evidence = 'double_endorsement_evidence'
     endorsement = 'endorsement'
+    endorsement_with_slot = 'endorsement_with_slot'
     origination = 'origination'
     proposals = 'proposals'
     reveal = 'reveal'
@@ -18,6 +19,7 @@ class OperationKind:
         double_baking_evidence,
         double_endorsement_evidence,
         endorsement,
+        endorsement_with_slot,
         origination,
         proposals,
         reveal,
