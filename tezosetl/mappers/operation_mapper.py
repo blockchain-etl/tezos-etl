@@ -71,6 +71,8 @@ def map_base_operation(block, operation_group_index, operation_index, content_in
 def map_operation(operation_kind, content, base_operation):
     if operation_kind == OperationKind.endorsement:
         return map_endorsement(content, base_operation)
+    elif operation_kind == OperationKind.endorsement_with_slot:
+        return map_endorsement_with_slot(content, base_operation)
     elif operation_kind == OperationKind.transaction:
         return map_transaction(content, base_operation)
     elif operation_kind == OperationKind.delegation:
@@ -100,6 +102,21 @@ def map_endorsement(content, base_operation):
     return {**base_operation, **{
         'delegate': metadata.get('delegate'),
         'public_key': content.get('public_key'),
+        'slots': metadata.get('slots')
+    }}
+
+
+def map_endorsement_with_slot(content, base_operation):
+    metadata = content.get('metadata', EMPTY_OBJECT)
+    endorsement = content.get('endorsement', EMPTY_OBJECT)
+    operations = endorsement.get('operations', EMPTY_OBJECT)
+    return {**base_operation, **{
+        'delegate': metadata.get('delegate'),
+        'endorsement_branch': endorsement.get('branch'),
+        'endorsement_signature': endorsement.get('signature'),
+        'operations_kind': operations.get('kind'),
+        'operations_level': operations.get('level'),
+        'slot': content.get('slot'),
         'slots': metadata.get('slots')
     }}
 

@@ -180,6 +180,28 @@ public_key: STRING
 slots: INTEGER (REPEATED)
 ```
 
+### endorsement_with_slot_operations
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+delegate: STRING
+endorsement_branch: STRING
+endorsement_signature: STRING
+operations_kind: STRING
+operations_level: INTEGER
+slot``: INTEGER
+slots: INTEGER (REPEATED)
+```
+
 ### origination_operations
 
 ```
