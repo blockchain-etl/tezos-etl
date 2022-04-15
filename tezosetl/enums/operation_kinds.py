@@ -4,12 +4,15 @@ class OperationKind:
     delegation = 'delegation'
     double_baking_evidence = 'double_baking_evidence'
     double_endorsement_evidence = 'double_endorsement_evidence'
+    double_preendorsement_evidence = 'double_preendorsement_evidence'
     endorsement = 'endorsement'
+    preendorsement = 'preendorsement'
     endorsement_with_slot = 'endorsement_with_slot'
     origination = 'origination'
     proposals = 'proposals'
     reveal = 'reveal'
     seed_nonce_revelation = 'seed_nonce_revelation'
+    set_deposits_limit = 'set_deposits_limit'
     transaction = 'transaction'
 
     ALL = [
@@ -18,11 +21,14 @@ class OperationKind:
         delegation,
         double_baking_evidence,
         double_endorsement_evidence,
+        double_preendorsement_evidence,
         endorsement,
+        preendorsement,
         endorsement_with_slot,
         origination,
         proposals,
         reveal,
         seed_nonce_revelation,
+        set_deposits_limit,
         transaction,
     ]
