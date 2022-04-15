@@ -162,7 +162,46 @@ denounced_2_signature: STRING
 denounced_2_level: INTEGER
 ```
 
+### double_preendorsement_evidence_operations
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+denounced_1_branch: STRING
+denounced_1_signature: STRING
+denounced_1_level: INTEGER
+denounced_2_branch: STRING
+denounced_2_signature: STRING
+denounced_2_level: INTEGER
+```
+
 ### endorsement_operations
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+delegate: STRING
+public_key: STRING
+slots: INTEGER (REPEATED)
+```
+
+### preendorsement_operations
 
 ```
 level: INTEGER
@@ -282,6 +321,28 @@ operation_index: INTEGER
 content_index: INTEGER
 internal_operation_index: INTEGER
 nonce: STRING
+```
+
+### set_deposits_limits
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+source: STRING
+fee: INTEGER
+counter: INTEGER
+gas_limit: INTEGER
+storage_limit: INTEGER
+status: STRING
+consumed_gas: INTEGER
 ```
 
 ### transaction_operations

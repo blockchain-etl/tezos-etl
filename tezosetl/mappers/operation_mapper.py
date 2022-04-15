@@ -71,6 +71,8 @@ def map_base_operation(block, operation_group_index, operation_index, content_in
 def map_operation(operation_kind, content, base_operation):
     if operation_kind == OperationKind.endorsement:
         return map_endorsement(content, base_operation)
+    elif operation_kind == OperationKind.preendorsement:
+        return map_endorsement(content, base_operation)
     elif operation_kind == OperationKind.endorsement_with_slot:
         return map_endorsement_with_slot(content, base_operation)
     elif operation_kind == OperationKind.transaction:
@@ -91,6 +93,8 @@ def map_operation(operation_kind, content, base_operation):
         return map_double_baking_evidence(content, base_operation)
     elif operation_kind == OperationKind.double_endorsement_evidence:
         return map_double_endorsement_evidence(content, base_operation)
+    elif operation_kind == OperationKind.double_preendorsement_evidence:
+        return map_double_endorsement_evidence(content, base_operation)
     elif operation_kind == OperationKind.ballot:
         return map_ballot(content, base_operation)
     else:
@@ -104,7 +108,6 @@ def map_endorsement(content, base_operation):
         'public_key': content.get('public_key'),
         'slots': metadata.get('slots')
     }}
-
 
 def map_endorsement_with_slot(content, base_operation):
     metadata = content.get('metadata', EMPTY_OBJECT)
@@ -120,6 +123,19 @@ def map_endorsement_with_slot(content, base_operation):
         'slots': metadata.get('slots')
     }}
 
+def map_set_deposits_limit(content, base_operation):
+    operation_result = get_operation_result(content)
+
+    return {**base_operation, **{
+        'source': content.get('source'),
+        'fee': safe_int(content.get('fee')),
+        'counter': safe_int(content.get('counter')),
+        'gas_limit': safe_int(content.get('gas_limit')),
+        'storage_limit': safe_int(content.get('storage_limit')),
+        'limit': safe_int(content.get('limit')),
+        'status': operation_result.get('status'),
+        'consumed_gas': safe_int(operation_result.get('consumed_gas'))
+    }}
 
 def map_transaction(content, base_operation):
     operation_result = get_operation_result(content)
