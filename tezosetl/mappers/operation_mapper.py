@@ -95,6 +95,8 @@ def map_operation(operation_kind, content, base_operation):
         return map_double_endorsement_evidence(content, base_operation)
     elif operation_kind == OperationKind.double_preendorsement_evidence:
         return map_double_endorsement_evidence(content, base_operation)
+    elif operation_kind == OperationKind.set_deposits_limit:
+        return map_set_deposits_limit(content, base_operation)
     elif operation_kind == OperationKind.ballot:
         return map_ballot(content, base_operation)
     else:
