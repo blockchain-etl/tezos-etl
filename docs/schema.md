@@ -285,6 +285,30 @@ proposals: STRING (REPEATED)
 period: INTEGER
 ```
 
+### register_global_constant_operations
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+source: STRING
+fee: INTEGER
+counter: INTEGER
+gas_limit: INTEGER
+storage_limit: INTEGER
+value: STRING
+status: STRING
+consumed_gas: INTEGER
+storage_size: INTEGER
+global_address: STRING
+```
 ### reveal_operations
 
 ```

@@ -10,6 +10,7 @@ class OperationKind:
     endorsement_with_slot = 'endorsement_with_slot'
     origination = 'origination'
     proposals = 'proposals'
+    register_global_constant = 'register_global_constant'
     reveal = 'reveal'
     seed_nonce_revelation = 'seed_nonce_revelation'
     set_deposits_limit = 'set_deposits_limit'
@@ -27,6 +28,7 @@ class OperationKind:
         endorsement_with_slot,
         origination,
         proposals,
+        register_global_constant,
         reveal,
         seed_nonce_revelation,
         set_deposits_limit,
