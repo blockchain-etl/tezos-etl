@@ -186,7 +186,7 @@ def map_register_global_constant(content, base_operation):
         'status': operation_result.get('status'),
         'consumed_gas': safe_int(operation_result.get('consumed_gas')),
         'storage_size': safe_int(operation_result.get('storage_size')),
-        'value': json_dumps(operation.get('value')),
+        'value': json_dumps(content.get('value')),
     }}
 
 def map_reveal(content, base_operation):
