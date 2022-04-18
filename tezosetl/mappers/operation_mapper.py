@@ -98,7 +98,9 @@ def map_operation(operation_kind, content, base_operation):
     elif operation_kind == OperationKind.set_deposits_limit:
         return map_set_deposits_limit(content, base_operation)
     elif operation_kind == OperationKind.ballot:
-        return map_ballot(content, base_operation)
+        return map_ballot(content, base_operation)    
+    elif operation_kind == OperationKind.register_global_constant:
+        return map_register_global_constant(content, base_operation)
     else:
         raise KeyError(f'Operation kind {operation_kind} not recognized. {json.dumps(content)}')
 
@@ -170,6 +172,22 @@ def map_delegation(content, base_operation):
         'status': operation_result.get('status'),
     }}
 
+def map_register_global_constant(content, base_operation):
+    operation_result = get_operation_result(content)
+
+    return {**base_operation, **{
+        'source': content.get('source'),
+        'destination': content.get('destination'),
+        'fee': safe_int(content.get('fee')),
+        'amount': safe_int(content.get('amount')),
+        'counter': safe_int(content.get('counter')),
+        'gas_limit': safe_int(content.get('gas_limit')),
+        'storage_limit': safe_int(content.get('storage_limit')),
+        'status': operation_result.get('status'),
+        'consumed_gas': safe_int(operation_result.get('consumed_gas')),
+        'storage_size': safe_int(operation_result.get('storage_size')),
+        'value': json_dumps(operation.get('value')),
+    }}
 
 def map_reveal(content, base_operation):
     operation_result = get_operation_result(content)
