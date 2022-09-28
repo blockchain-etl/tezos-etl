@@ -87,7 +87,7 @@ def get_partitions(start, end, partition_batch_size, provider_uri):
 @click.option('-e', '--end', required=True, type=str, help='End block/ISO date')
 @click.option('-b', '--partition-batch-size', default=100, show_default=True, type=int,
               help='The number of blocks to export in partition.')
-@click.option('-p', '--provider-uri', default='https://mainnet-tezos.giganode.io', show_default=True, type=str,
+@click.option('-p', '--provider-uri', default='https://mainnet.api.tez.ie', show_default=True, type=str,
               help='The URI of the remote Tezos node')
 @click.option('-o', '--output-dir', default='output', show_default=True, type=str,
               help='Output directory, partitioned in Hive style.')
