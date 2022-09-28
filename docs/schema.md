@@ -349,7 +349,7 @@ internal_operation_index: INTEGER
 nonce: STRING
 ```
 
-### set_deposits_limits
+### set_deposits_limit_operations
 
 ```
 level: INTEGER
@@ -372,7 +372,7 @@ consumed_milligas: INTEGER
 consumed_gas: INTEGER
 ```
 
-### increase_paid_storage
+### increase_paid_storage_operations
 
 ```
 level: INTEGER
@@ -395,7 +395,7 @@ consumed_milligas: INTEGER
 consumed_gas: INTEGER
 ```
 
-### vdf_revelation
+### vdf_revelation_operations
 
 ```
 solution: STRING
