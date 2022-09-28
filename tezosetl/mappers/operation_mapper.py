@@ -142,7 +142,7 @@ def map_set_deposits_limit(content, base_operation):
         'storage_limit': safe_int(content.get('storage_limit')),
         'limit': safe_int(content.get('limit')),
         'status': operation_result.get('status'),
-        'consumed_gas': safe_int(operation_result.get('consumed_gas'))
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas'))
     }}
 
 def map_transaction(content, base_operation):
@@ -309,7 +309,6 @@ def map_increase_paid_storage(content, base_operation):
         'storage_limit': safe_int(content.get('storage_limit')),
         'status': operation_result.get('status'),
         'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
-        'storage_size': safe_int(operation_result.get('storage_size')),
     }}
 
 def map_vdf_revelation(content, base_operation):
