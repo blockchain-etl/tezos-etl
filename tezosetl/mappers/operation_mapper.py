@@ -142,7 +142,7 @@ def map_set_deposits_limit(content, base_operation):
         'storage_limit': safe_int(content.get('storage_limit')),
         'limit': safe_int(content.get('limit')),
         'status': operation_result.get('status'),
-        'consumed_milligas': safe_int(operation_result.get('consumed_milligas'))
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
         'consumed_gas': safe_int(operation_result.get('consumed_gas'))
     }}
 
