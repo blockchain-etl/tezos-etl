@@ -13,6 +13,7 @@ protocol: STRING
 chain_id: STRING
 block_hash: STRING
 nonce_hash: STRING
+consumed_milligas: INTEGER
 consumed_gas: INTEGER
 baker: STRING
 voting_period_kind: STRING
@@ -305,6 +306,7 @@ gas_limit: INTEGER
 storage_limit: INTEGER
 value: STRING
 status: STRING
+consumed_milligas: INTEGER
 consumed_gas: INTEGER
 storage_size: INTEGER
 global_address: STRING
@@ -366,7 +368,37 @@ counter: INTEGER
 gas_limit: INTEGER
 storage_limit: INTEGER
 status: STRING
+consumed_milligas: INTEGER
 consumed_gas: INTEGER
+```
+
+### increase_paid_storage
+
+```
+level: INTEGER
+timestamp: TIMESTAMP
+block_hash: STRING
+branch: STRING
+signature: STRING
+operation_hash: STRING
+operation_group_index: INTEGER
+operation_index: INTEGER
+content_index: INTEGER
+internal_operation_index: INTEGER
+source: STRING
+fee: INTEGER
+counter: INTEGER
+gas_limit: INTEGER
+storage_limit: INTEGER
+status: STRING
+consumed_milligas: INTEGER
+consumed_gas: INTEGER
+```
+
+### vdf_revelation
+
+```
+solution: STRING
 ```
 
 ### transaction_operations
@@ -390,6 +422,7 @@ counter: INTEGER
 gas_limit: INTEGER
 storage_limit: INTEGER
 status: STRING
+consumed_milligas: INTEGER
 consumed_gas: INTEGER
 storage_size: INTEGER
 parameters: STRING

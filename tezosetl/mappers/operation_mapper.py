@@ -101,6 +101,10 @@ def map_operation(operation_kind, content, base_operation):
         return map_ballot(content, base_operation)    
     elif operation_kind == OperationKind.register_global_constant:
         return map_register_global_constant(content, base_operation)
+    elif operation_kind == OperationKind.increase_paid_storage:
+        return map_increase_paid_storage(content, base_operation)
+    elif operation_kind == OperationKind.vdf_revelation:
+        return map_vdf_revelation(content, base_operation) 
     else:
         raise KeyError(f'Operation kind {operation_kind} not recognized. {json.dumps(content)}')
 
@@ -138,6 +142,7 @@ def map_set_deposits_limit(content, base_operation):
         'storage_limit': safe_int(content.get('storage_limit')),
         'limit': safe_int(content.get('limit')),
         'status': operation_result.get('status'),
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
         'consumed_gas': safe_int(operation_result.get('consumed_gas'))
     }}
 
@@ -153,6 +158,7 @@ def map_transaction(content, base_operation):
         'gas_limit': safe_int(content.get('gas_limit')),
         'storage_limit': safe_int(content.get('storage_limit')),
         'status': operation_result.get('status'),
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
         'consumed_gas': safe_int(operation_result.get('consumed_gas')),
         'storage_size': safe_int(operation_result.get('storage_size')),
         'parameters': json_dumps(content.get('parameters')),
@@ -184,6 +190,7 @@ def map_register_global_constant(content, base_operation):
         'gas_limit': safe_int(content.get('gas_limit')),
         'storage_limit': safe_int(content.get('storage_limit')),
         'status': operation_result.get('status'),
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
         'consumed_gas': safe_int(operation_result.get('consumed_gas')),
         'storage_size': safe_int(operation_result.get('storage_size')),
         'value': json_dumps(content.get('value')),
@@ -290,6 +297,29 @@ def map_ballot(content, base_operation):
         'proposal': content.get('proposal'),
         'period': content.get('period'),
         'ballot': content.get('ballot'),
+    }}
+
+def map_increase_paid_storage(content, base_operation):
+    operation_result = get_operation_result(content)
+
+    return {**base_operation, **{
+        'source': content.get('source'),
+        'destination': content.get('destination'),
+        'fee': safe_int(content.get('fee')),
+        'amount': safe_int(content.get('amount')),
+        'counter': safe_int(content.get('counter')),
+        'gas_limit': safe_int(content.get('gas_limit')),
+        'storage_limit': safe_int(content.get('storage_limit')),
+        'status': operation_result.get('status'),
+        'consumed_milligas': safe_int(operation_result.get('consumed_milligas')),
+        'consumed_gas': safe_int(operation_result.get('consumed_gas')),
+    }}
+
+def map_vdf_revelation(content, base_operation):
+    operation_result = get_operation_result(content)
+
+    return {**base_operation, **{
+        'solution': content.get('solution'),
     }}
 
 

@@ -15,6 +15,8 @@ class OperationKind:
     seed_nonce_revelation = 'seed_nonce_revelation'
     set_deposits_limit = 'set_deposits_limit'
     transaction = 'transaction'
+    increase_paid_storage = 'increase_paid_storage'
+    vdf_revelation = 'vdf_revelation'
 
     ALL = [
         activate_account,
@@ -33,4 +35,6 @@ class OperationKind:
         seed_nonce_revelation,
         set_deposits_limit,
         transaction,
+        increase_paid_storage,
+        vdf_revelation,
     ]
