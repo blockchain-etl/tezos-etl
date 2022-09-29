@@ -319,7 +319,7 @@ def map_vdf_revelation(content, base_operation):
     operation_result = get_operation_result(content)
 
     return {**base_operation, **{
-        'solution': content.get('solution'),
+        'solution': json_dumps(content.get('solution')),
     }}
 
 
